@@ -26,7 +26,8 @@ public final class BuscadorCP {
 	public static BuscadorCP buscador;
 
 	public static final int RADIO_DEFAULT = 20;
-	private static final String username = "arso"; // "arsojp";
+	private static final int REINTENTOS_CONEXION = 10;
+	private static final String username = /*"arso"*/ "arsojp";
 
 	private BuscadorCP() {
 	}
@@ -63,8 +64,8 @@ public final class BuscadorCP {
 
 		// Generar la URL de la consulta
 		String url = "http://api.geonames.org/findNearbyWikipedia?postalcode=" + codigo + "&country=ES&radius="
-				+ RADIO_DEFAULT + "&username=" + username;
-		System.out.println("URL generada: " + url);
+				+ RADIO_DEFAULT + "&username=" + username + "&lang=es";
+		System.out.println("URL GeoNames generada: " + url);
 
 		try {
 			// 1. Obtener una factoría
@@ -77,9 +78,24 @@ public final class BuscadorCP {
 			System.out.println("Buscando en GeoNames...");
 
 			// 3. Analizar el documento
-			Document documento = analizador.parse(url);
+			int reintentos = REINTENTOS_CONEXION;
+			Document documento = null;
+			while (reintentos > 0) {
+				try {
+					 documento = analizador.parse(url);
+					 reintentos = 0;
+				} catch (java.net.ConnectException e) {
+					System.err.println("Fallo de conexión, reintentando...");
+					reintentos--;
+				}
+			}
+			if(documento == null) {
+				System.err.println("Agotados los reintentos de conexión");
+				throw new java.net.ConnectException();
+			}
+				
 
-			//printDocument(documento, System.out);
+			// printDocument(documento, System.out);
 
 			NodeList elementos = documento.getElementsByTagName("entry");
 			System.out.println("Búsqueda completada. " + elementos.getLength() + " resultados");
@@ -95,7 +111,11 @@ public final class BuscadorCP {
 
 				// System.out.println(nombreText + "\n" + descripcionText + "\n" +
 				// wikipediaUrlText);
-				lugares.add(new Lugar(nombreText, descripcionText, wikipediaUrlText));
+				Lugar l = new Lugar();
+				l.setNombre(nombreText);
+				l.setDescripcion(descripcionText);
+				l.setWikipediaUrl(wikipediaUrlText);
+				lugares.add(l);
 			}
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			// TODO Auto-generated catch block
