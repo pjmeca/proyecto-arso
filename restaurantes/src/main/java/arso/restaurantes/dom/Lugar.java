@@ -1,5 +1,8 @@
 package arso.restaurantes.dom;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Lugar {
 
 	private String nombre;
@@ -7,6 +10,14 @@ public class Lugar {
 	private String resumen; // de DBpedia
 	private String wikipediaUrl;
 	private String jsonUrl;
+	private List<String> categorias;
+	private List<String> linksExternos;
+	private String imagen;
+	
+	public Lugar() {
+		categorias = new ArrayList<>();
+		linksExternos = new ArrayList<>();
+	}
 
 	public String getNombre() {
 		return nombre;
@@ -47,4 +58,37 @@ public class Lugar {
 	public void setResumen(String resumen) {
 		this.resumen = resumen;
 	}
+
+	public List<String> getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(List<String> categorias) {
+		this.categorias = categorias;
+	}
+	
+	public void addCategoria(String categoria) {
+		categorias.add(categoria);
+	}
+	
+	public List<String> getLinksExternos() {
+		return linksExternos;
+	}
+
+	public void setLinksExternos(List<String> links) {
+		this.linksExternos=links;
+	}
+	
+	public void addLinkExterno(String link) {
+		linksExternos.add(link);
+	}
+	
+	public String getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
+	}
+	
 }

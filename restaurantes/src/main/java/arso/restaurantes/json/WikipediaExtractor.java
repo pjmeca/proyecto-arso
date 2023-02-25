@@ -41,7 +41,7 @@ public class WikipediaExtractor {
 		return obj2.getJsonArray(key);
 	}
 
-	public void getInfo(String codigo) {
+	public List<Lugar> getInfo(String codigo) {
 		List<Lugar> lugares = BuscadorCP.getInstance().findByCP(codigo);
 
 		for (Lugar lugar : lugares) {
@@ -55,15 +55,43 @@ public class WikipediaExtractor {
 
 			// Extraer propiedades
 			try {
+				
 				// Resumen
-				lugar.setResumen(
-						getPropiedad(ultimo, "http://dbpedia.org/ontology/abstract")
-						.getJsonObject(0).getString("value"));
+				JsonArray aux = getPropiedad(ultimo, "http://dbpedia.org/ontology/abstract");
+				if(aux != null) {
+					lugar.setResumen(aux.getJsonObject(0).getString("value"));
+				}
 				System.out.println("Resumen: " + lugar.getResumen());
+				
+				// Categorías
+				JsonArray categoriasJson = getPropiedad(ultimo, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type");
+				if(categoriasJson != null)
+					for(int i=0; i<categoriasJson.size(); i++) {
+						lugar.addCategoria(categoriasJson.getJsonObject(i).getString("value"));
+					}
+				System.out.println("Categorías: " + lugar.getCategorias());
+			
+				//Enlaces externos
+				JsonArray linksJson = getPropiedad(ultimo,"http://dbpedia.org/ontology/wikiPageExternalLink");
+				if(linksJson != null)
+					for(int i=0; i<linksJson.size(); i++) {
+						lugar.addLinkExterno(linksJson.getJsonObject(i).getString("value"));
+					}
+				System.out.println("Enlaces externos: " + lugar.getLinksExternos());
+				
+				//Imagen wikipedia
+				aux = getPropiedad(ultimo,"http://es.dbpedia.org/property/imagen");
+				if(aux != null)
+					lugar.setImagen(aux.getJsonObject(0).getString("value"));
+				System.out.println("Imagen: " + lugar.getImagen());
+				
+				System.out.println();
 			} catch (IOException e) {
 				System.err.println("No se ha podido leer de DBpedia.");
 			}
 
 		}
+		
+		return lugares;
 	}
 }
