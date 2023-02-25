@@ -12,7 +12,7 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import arso.restaurantes.dom.BuscadorCP;
-import arso.restaurantes.dom.Lugar;
+import arso.restaurantes.modelo.SitioTuristico;
 
 public class WikipediaExtractor {
 
@@ -41,10 +41,10 @@ public class WikipediaExtractor {
 		return obj2.getJsonArray(key);
 	}
 
-	public List<Lugar> getInfo(String codigo) {
-		List<Lugar> lugares = BuscadorCP.getInstance().findByCP(codigo);
+	public List<SitioTuristico> getInfo(String codigo) {
+		List<SitioTuristico> lugares = BuscadorCP.getInstance().findByCP(codigo);
 
-		for (Lugar lugar : lugares) {
+		for (SitioTuristico lugar : lugares) {
 
 			// Generar URL DBpedia
 			String[] trozos = lugar.getWikipediaUrl().split("/");

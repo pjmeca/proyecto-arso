@@ -1,10 +1,18 @@
-package arso.restaurantes.dom;
+package arso.restaurantes.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Lugar {
+import org.bson.BsonType;
+import org.bson.codecs.pojo.annotations.BsonId;
+import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
+public class SitioTuristico {
+
+	@BsonId
+	@BsonRepresentation(BsonType.OBJECT_ID)	
+	private String id;
+	
 	private String nombre;
 	private String descripcion; // de GeoNames
 	private String resumen; // de DBpedia
@@ -14,10 +22,21 @@ public class Lugar {
 	private List<String> linksExternos;
 	private String imagen;
 	
-	public Lugar() {
+	public SitioTuristico() {
 		categorias = new ArrayList<>();
 		linksExternos = new ArrayList<>();
 	}
+
+	
+	public String getId() {
+		return id;
+	}
+
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 
 	public String getNombre() {
 		return nombre;

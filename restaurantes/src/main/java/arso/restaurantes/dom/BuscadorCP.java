@@ -21,6 +21,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import arso.restaurantes.modelo.SitioTuristico;
+
 public final class BuscadorCP {
 
 	public static BuscadorCP buscador;
@@ -58,9 +60,9 @@ public final class BuscadorCP {
 		}
 	}
 
-	public List<Lugar> findByCP(String codigo) {
+	public List<SitioTuristico> findByCP(String codigo) {
 
-		ArrayList<Lugar> lugares = new ArrayList<>();
+		ArrayList<SitioTuristico> lugares = new ArrayList<>();
 
 		// Generar la URL de la consulta
 		String url = "http://api.geonames.org/findNearbyWikipedia?postalcode=" + codigo + "&country=ES&radius="
@@ -111,7 +113,7 @@ public final class BuscadorCP {
 
 				// System.out.println(nombreText + "\n" + descripcionText + "\n" +
 				// wikipediaUrlText);
-				Lugar l = new Lugar();
+				SitioTuristico l = new SitioTuristico();
 				l.setNombre(nombreText);
 				l.setDescripcion(descripcionText);
 				l.setWikipediaUrl(wikipediaUrlText);
