@@ -7,9 +7,11 @@ import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
+import arso.especificacion.Specificable;
+import arso.especificacion.Specification;
 import arso.restaurantes.repositorio.Identificable;
 
-public class Restaurante implements Identificable{
+public class Restaurante implements Identificable, Specificable<Restaurante>{
 	
 	@BsonId
 	@BsonRepresentation(BsonType.OBJECT_ID)	
@@ -21,6 +23,13 @@ public class Restaurante implements Identificable{
 	
 	public Restaurante() {
 		sitiosTuristicos = new ArrayList<>();
+	}
+	
+	public Restaurante(String nombre, double latitud, double longitud) {
+		this();
+		this.nombre = nombre;
+		this.latitud = latitud;
+		this.longitud = longitud;
 	}
 	
 	public String getId() {
@@ -55,5 +64,10 @@ public class Restaurante implements Identificable{
 	}
 	public void addSitioTuristico(SitioTuristico sitioTuristico) {
 		sitiosTuristicos.add(sitioTuristico);
+	}
+
+	@Override
+	public boolean satisfies(Specification<Restaurante> specification) {
+		return specification.isSatisfied(this);
 	}
 }

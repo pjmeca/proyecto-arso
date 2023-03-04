@@ -3,6 +3,8 @@ package arso.restaurantes.repositorio;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import arso.especificacion.Specification;
 import arso.repositorio.EntidadNoEncontrada;
 import arso.repositorio.RepositorioException;
 import arso.repositorio.RepositorioString;
@@ -43,6 +45,11 @@ public class RepositorioRestaurantesMemoria implements RepositorioString<Restaur
 	@Override
 	public Restaurante getById(String id) throws RepositorioException, EntidadNoEncontrada {
 		return mapa.get(id);
+	}
+	
+	public List<Restaurante> getBySpecification(Specification<Restaurante> especificacion){
+		
+		return mapa.values().stream().filter(r -> r.satisfies(especificacion)).toList();
 	}
 
 	@Override
