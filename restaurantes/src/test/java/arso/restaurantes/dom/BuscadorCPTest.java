@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 class BuscadorCPTest {
 
-	private BuscadorCP buscador = BuscadorCP.getInstance();
+	private BuscadorGeoNames buscador = BuscadorGeoNames.getInstance();
 	
 	@Test
 	void test() {

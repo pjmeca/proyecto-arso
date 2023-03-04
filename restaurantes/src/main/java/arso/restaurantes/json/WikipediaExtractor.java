@@ -11,7 +11,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import arso.restaurantes.dom.BuscadorCP;
+import arso.restaurantes.dom.BuscadorGeoNames;
 import arso.restaurantes.modelo.SitioTuristico;
 
 public class WikipediaExtractor {
@@ -42,7 +42,7 @@ public class WikipediaExtractor {
 	}
 
 	public List<SitioTuristico> getInfo(String codigo) {
-		List<SitioTuristico> lugares = BuscadorCP.getInstance().findByCP(codigo);
+		List<SitioTuristico> lugares = BuscadorGeoNames.getInstance().findByCP(codigo);
 
 		for (SitioTuristico lugar : lugares) {
 

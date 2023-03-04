@@ -23,22 +23,22 @@ import org.xml.sax.SAXException;
 
 import arso.restaurantes.modelo.SitioTuristico;
 
-public final class BuscadorCP {
+public final class BuscadorGeoNames {
 
-	public static BuscadorCP buscador;
+	public static BuscadorGeoNames buscador;
 
 	public static final int RADIO_DEFAULT = 20;
 	private static final int REINTENTOS_CONEXION = 10;
 	private static final String username = /*"arso"*/ "arsojp";
 
-	private BuscadorCP() {
+	private BuscadorGeoNames() {
 	}
 
-	public static BuscadorCP getInstance() {
+	public static BuscadorGeoNames getInstance() {
 		if (buscador != null)
 			return buscador;
 
-		buscador = new BuscadorCP();
+		buscador = new BuscadorGeoNames();
 		return buscador;
 	}
 
@@ -60,15 +60,10 @@ public final class BuscadorCP {
 		}
 	}
 
-	public List<SitioTuristico> findByCP(String codigo) {
+	private List<SitioTuristico> find(String url) {
 
 		ArrayList<SitioTuristico> lugares = new ArrayList<>();
-
-		// Generar la URL de la consulta
-		String url = "http://api.geonames.org/findNearbyWikipedia?postalcode=" + codigo + "&country=ES&radius="
-				+ RADIO_DEFAULT + "&username=" + username + "&lang=es";
-		System.out.println("URL GeoNames generada: " + url);
-
+		
 		try {
 			// 1. Obtener una factoría
 			DocumentBuilderFactory factoria = DocumentBuilderFactory.newInstance();
@@ -125,5 +120,25 @@ public final class BuscadorCP {
 		}
 
 		return lugares;
+	}
+	
+	public List<SitioTuristico> findByCP(String codigo) {
+
+		// Generar la URL de la consulta
+		String url = "http://api.geonames.org/findNearbyWikipedia?postalcode=" + codigo + "&country=ES&radius="
+				+ RADIO_DEFAULT + "&username=" + username + "&lang=es";
+		System.out.println("URL GeoNames generada: " + url);
+		
+		return find(url);
+	}
+	
+	public List<SitioTuristico> findByCoord(double latitud, double longitud) {
+
+		// Generar la URL de la consulta
+		String url = "http://api.geonames.org/findNearbyWikipedia?lat=" + latitud + "&lng=" + longitud + "&country=ES&radius="
+				+ RADIO_DEFAULT + "&username=" + username + "&lang=es";
+		System.out.println("URL GeoNames generada: " + url);
+		
+		return find(url);
 	}
 }
