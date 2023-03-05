@@ -3,6 +3,7 @@ package arso.restaurantes.modelo;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonId;
@@ -11,7 +12,7 @@ import arso.especificacion.Specificable;
 import arso.especificacion.Specification;
 import arso.restaurantes.repositorio.Identificable;
 
-public class Restaurante implements Identificable, Specificable<Restaurante>{
+public class Restaurante implements Identificable, Specificable<Restaurante>, Cloneable{
 	
 	@BsonId
 	@BsonRepresentation(BsonType.OBJECT_ID)	
@@ -97,5 +98,35 @@ public class Restaurante implements Identificable, Specificable<Restaurante>{
 	@Override
 	public boolean satisfies(Specification<Restaurante> specification) {
 		return specification.isSatisfied(this);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, latitud, longitud, nombre, platos, sitiosTuristicos);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Restaurante other = (Restaurante) obj;
+		return Objects.equals(id, other.id)
+				&& Double.doubleToLongBits(latitud) == Double.doubleToLongBits(other.latitud)
+				&& Double.doubleToLongBits(longitud) == Double.doubleToLongBits(other.longitud)
+				&& Objects.equals(nombre, other.nombre) && Objects.equals(platos, other.platos)
+				&& Objects.equals(sitiosTuristicos, other.sitiosTuristicos);
+	}
+	
+	@Override
+	public Restaurante clone(){
+		Restaurante r = new Restaurante(this.nombre,this.latitud,this.longitud);
+		r.setId(this.id);
+		r.setPlatos(new HashSet<>(this.platos));
+		r.setSitiosTuristicos(new ArrayList<>(this.sitiosTuristicos));
+		return r;
 	}
 }

@@ -13,11 +13,11 @@ public interface Repositorio <T, K> {
 		
     K add(T entity) throws RepositorioException;
     
-    void update(T entity) throws RepositorioException, EntidadNoEncontrada;
+    void update(T entity) throws RepositorioException, EntidadNoEncontradaException;
     
-    void delete(T entity) throws RepositorioException, EntidadNoEncontrada;
+    void delete(T entity) throws RepositorioException, EntidadNoEncontradaException;
 
-    T getById(K id) throws RepositorioException, EntidadNoEncontrada;
+    T getById(K id) throws RepositorioException, EntidadNoEncontradaException;
     
 	List<T> getAll() throws RepositorioException;
 

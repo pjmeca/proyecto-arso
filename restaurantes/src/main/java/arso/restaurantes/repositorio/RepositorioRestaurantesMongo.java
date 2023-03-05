@@ -18,7 +18,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
-import arso.repositorio.EntidadNoEncontrada;
+import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.RepositorioException;
 import arso.repositorio.RepositorioString;
 import arso.restaurantes.modelo.Restaurante;
@@ -58,22 +58,22 @@ public class RepositorioRestaurantesMongo implements RepositorioString<Restauran
 	}
 
 	@Override
-	public void update(Restaurante entity) throws RepositorioException, EntidadNoEncontrada {
+	public void update(Restaurante entity) throws RepositorioException, EntidadNoEncontradaException {
 		
 		UpdateResult result = restaurantes.replaceOne(Filters.eq("id", entity.getId()), entity);
 		
 		if(result.getMatchedCount() == 0)
-			throw new EntidadNoEncontrada("No se ha encontrado el restaurante con id: "+entity.getId());
+			throw new EntidadNoEncontradaException("No se ha encontrado el restaurante con id: "+entity.getId());
 	}
 
 	@Override
-	public void delete(Restaurante entity) throws RepositorioException, EntidadNoEncontrada {
+	public void delete(Restaurante entity) throws RepositorioException, EntidadNoEncontradaException {
 		restaurantes.deleteOne(Filters.eq("id", entity.getId()));
 		
 	}
 
 	@Override
-	public Restaurante getById(String id) throws RepositorioException, EntidadNoEncontrada {
+	public Restaurante getById(String id) throws RepositorioException, EntidadNoEncontradaException {
 		return restaurantes.find(Filters.eq("id", id)).first();
 	}
 

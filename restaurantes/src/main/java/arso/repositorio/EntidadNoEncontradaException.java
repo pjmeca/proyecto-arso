@@ -5,13 +5,13 @@ package arso.repositorio;
  */
 
 @SuppressWarnings("serial")
-public class EntidadNoEncontrada extends Exception {
+public class EntidadNoEncontradaException extends Exception {
 
-	public EntidadNoEncontrada(String msg, Throwable causa) {		
+	public EntidadNoEncontradaException(String msg, Throwable causa) {		
 		super(msg, causa);
 	}
 	
-	public EntidadNoEncontrada(String msg) {
+	public EntidadNoEncontradaException(String msg) {
 		super(msg);		
 	}
 	
