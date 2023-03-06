@@ -41,6 +41,13 @@ public class RepositorioRestaurantesMemoria implements RepositorioString<Restaur
 		mapa.remove(entity.getId());
 		
 	}
+	
+	@Override
+	public void delete(String entityId) throws RepositorioException, EntidadNoEncontradaException {
+		if(mapa.remove(entityId) == null)
+			throw new EntidadNoEncontradaException("No existe la entidad.");
+		
+	}
 
 	@Override
 	public Restaurante getById(String id) throws RepositorioException, EntidadNoEncontradaException {
@@ -50,6 +57,7 @@ public class RepositorioRestaurantesMemoria implements RepositorioString<Restaur
 		return mapa.get(id).clone();
 	}
 	
+	@Override
 	public List<Restaurante> getBySpecification(Specification<Restaurante> especificacion){
 		
 		return mapa.values().stream().filter(r -> r.satisfies(especificacion)).toList();
@@ -64,5 +72,4 @@ public class RepositorioRestaurantesMemoria implements RepositorioString<Restaur
 	public List<String> getIds() throws RepositorioException {
 		return new ArrayList<>(mapa.keySet());
 	}
-
 }

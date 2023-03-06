@@ -2,6 +2,9 @@ package arso.repositorio;
 
 import java.util.List;
 
+import arso.especificacion.Specification;
+import arso.restaurantes.modelo.Restaurante;
+
 /*
  *  Repositorio para entidades gestionadas con identificador.
  *  El parámetro T representa al tipo de datos de la entidad.
@@ -16,10 +19,20 @@ public interface Repositorio <T, K> {
     void update(T entity) throws RepositorioException, EntidadNoEncontradaException;
     
     void delete(T entity) throws RepositorioException, EntidadNoEncontradaException;
+    
+    void delete(String entityId) throws RepositorioException, EntidadNoEncontradaException;
 
     T getById(K id) throws RepositorioException, EntidadNoEncontradaException;
     
+    List<T> getBySpecification(Specification<T> especificacion) throws RepositorioException, EntidadNoEncontradaException;
+    
 	List<T> getAll() throws RepositorioException;
+	
+	default void removeAll() throws RepositorioException, EntidadNoEncontradaException{
+		List<T> lista = getAll();
+		for(T t : lista)
+			delete(t);
+	}
 
-	List<K> getIds() throws RepositorioException;
+	List<K> getIds() throws RepositorioException;	
 }

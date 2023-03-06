@@ -1,5 +1,7 @@
 package arso.especificacion;
 
+import org.bson.conversions.Bson;
+
 public interface Specification<T> {
 
     boolean isSatisfied(T object);
@@ -15,4 +17,6 @@ public interface Specification<T> {
     default Specification<T> not(Specification<T> specification) {
         return new NotSpecification(specification);
     }
+    
+    Bson toBsonFilter();
 }

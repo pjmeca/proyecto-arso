@@ -1,5 +1,7 @@
 package arso.especificacion;
+import org.bson.conversions.Bson;
 
+import com.mongodb.client.model.Filters;
 public class NotSpecification<T> implements Specification<T> {
 
     private Specification<T> specification;
@@ -11,4 +13,9 @@ public class NotSpecification<T> implements Specification<T> {
     public boolean isSatisfied(T object) {
         return !specification.isSatisfied(object);
     }
+    
+    @Override
+	public Bson toBsonFilter() {
+		return Filters.not(specification.toBsonFilter());
+	}
 }

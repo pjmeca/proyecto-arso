@@ -2,6 +2,10 @@ package arso.especificacion;
 
 import java.beans.PropertyDescriptor;
 
+import org.bson.conversions.Bson;
+
+import com.mongodb.client.model.Filters;
+
 public class EqualsSpecification<T> implements Specification<T>{
 
     private String property;
@@ -30,4 +34,9 @@ public class EqualsSpecification<T> implements Specification<T>{
             throw new RuntimeException(e);
         }
     }
+    
+    @Override
+	public Bson toBsonFilter() {
+        return Filters.eq(property, value);
+	}
 }

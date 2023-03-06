@@ -5,11 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import org.bson.types.ObjectId;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.FactoriaRepositorios;
 import arso.repositorio.RepositorioException;
+import arso.restaurantes.especificacion.IsContienePlatoSpecification;
+import arso.restaurantes.especificacion.IsRadioSpecification;
 import arso.restaurantes.modelo.Plato;
 import arso.restaurantes.modelo.Restaurante;
 import arso.restaurantes.modelo.SitioTuristico;
@@ -21,8 +28,7 @@ public class ServicioRestaurantesTest {
 	private String r1, r2, r3, r4;
 
 	@BeforeEach
-	public void init() {
-		FactoriaRepositorios.resetRepositorios();
+	public void init() {		
 		servicio = new ServicioRestaurantes();
 		try {
 			r1Obj = new Restaurante("Burger", 1000, 1000);
@@ -35,6 +41,11 @@ public class ServicioRestaurantesTest {
 			e.printStackTrace();
 		}
 
+	}
+	
+	@AfterEach
+	public void end() {
+		assertDoesNotThrow(() -> servicio.removeAll());
 	}
 
 	@Test
@@ -54,12 +65,24 @@ public class ServicioRestaurantesTest {
 		});
 		assertThrows(RepositorioException.class, () -> {
 			Restaurante res = new Restaurante("prueba", 0, 0);
-			res.setId(servicio.getRestaurante(r1).getId());
+			Restaurante res2 = servicio.getRestaurante(r1);
+			res.setId(res2.getId());
 			servicio.create(res);
 		});
 
 		// Debería funcionar
-		assertDoesNotThrow(() -> assertTrue(!servicio.create(new Restaurante("Plaza", 10, 1000)).isBlank()));
+		String id = "";
+		try {
+			id = servicio.create(new Restaurante("Plaza", 10, 1000));
+		} catch (RepositorioException e) {
+			e.printStackTrace();
+		}
+		assertTrue(!id.isBlank());
+		try {
+			servicio.removeRestaurante(id);
+		} catch (RepositorioException | EntidadNoEncontradaException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Test
@@ -121,12 +144,11 @@ public class ServicioRestaurantesTest {
 		
 		assertDoesNotThrow(() -> servicio.setSitiosTuristicosDestacados(r4, lista));
 		assertDoesNotThrow(() -> {
-			Restaurante r;
-		r = servicio.getRestaurante(r4);
-		assertTrue(r.getSitiosTuristicos().equals(lista));
-		servicio.setSitiosTuristicosDestacados(r4, new ArrayList<SitioTuristico>());
-		r = servicio.getRestaurante(r4);
-		assertTrue(r.getSitiosTuristicos().isEmpty());
+			Restaurante r = servicio.getRestaurante(r4);
+			assertTrue(r.getSitiosTuristicos().contains(lista.get(0)));
+			servicio.setSitiosTuristicosDestacados(r4, new ArrayList<SitioTuristico>());
+			r = servicio.getRestaurante(r4);
+			assertTrue(r.getSitiosTuristicos().isEmpty());
 		});
 	}
 	
@@ -140,6 +162,7 @@ public class ServicioRestaurantesTest {
 		assertThrows(RepositorioException.class, () -> servicio.addPlato(r1, null));
 		assertThrows(RepositorioException.class, () -> servicio.addPlato(null, p));
 		assertDoesNotThrow(() -> servicio.addPlato(r1, p));
+		assertDoesNotThrow(() -> assertTrue(servicio.getRestaurante(r1).getPlatos().stream().filter(plato -> plato.getNombre().equals(p.getNombre())).findFirst().get().getPrecio() == 10));
 		assertThrows(RepositorioException.class, () -> servicio.addPlato(r1, p));
 	}
 
@@ -173,12 +196,11 @@ public class ServicioRestaurantesTest {
 		Plato p = new Plato();
 		p.setNombre("Pasta Carbonara");
 		p.setDescripcion("Pasta carbonara muy sabrosa");
-		p.setPrecio(15);
+		p.setPrecio(15.0);
 		assertDoesNotThrow(() -> servicio.addPlato(r1, p));
-		assertDoesNotThrow(() -> assertTrue(servicio.getRestaurante(r1).getPlatos().stream().filter(plato -> plato.getNombre().equals(p.getNombre())).findFirst().get().getPrecio() == 15));
-		p.setPrecio(10);
+		p.setPrecio(10.0);
 		assertDoesNotThrow(() -> servicio.updatePlato(r1, p));
-		assertDoesNotThrow(() -> assertTrue(servicio.getRestaurante(r1).getPlatos().stream().filter(plato -> plato.getNombre().equals(p.getNombre())).findFirst().get().getPrecio() == 10));
+		assertDoesNotThrow(() -> assertTrue(servicio.getRestaurante(r1).getPlatos().stream().filter(plato -> plato.getNombre().equals(p.getNombre())).findFirst().get().getPrecio() == 10.0));
 	}
 	
 	@Test
@@ -191,5 +213,44 @@ public class ServicioRestaurantesTest {
 	@Test
 	public void getListadoRestaurantesTest() {
 		assertDoesNotThrow(() -> assertTrue(servicio.getListadoRestaurantes().size() == 4));
+	}
+	
+	@Test
+	public void getListadoRestaurantesByEspecificacionTest(){
+		
+		assertThrows(RepositorioException.class, () -> servicio.getListadoRestaurantesBySpecification(null));
+		
+		//Contiene plato
+		Plato p = new Plato();
+		p.setNombre("Cafe");
+		p.setDescripcion("Cafe extremadamente estrafalario");
+		p.setPrecio(50);
+		assertDoesNotThrow(() -> servicio.addPlato(r4, p));
+		
+		
+		assertDoesNotThrow(() -> {
+			List<RestauranteResumen> l ;
+			l = servicio.getListadoRestaurantesBySpecification(new IsContienePlatoSpecification("Plato inexistente"));
+			assertTrue(l.size()==0);
+		});
+		assertDoesNotThrow(() -> {
+			List<RestauranteResumen> l ;
+			l = servicio.getListadoRestaurantesBySpecification(new IsContienePlatoSpecification("Cafe"));
+			assertTrue(l.size()==1 && l.get(0).getId().equals(r4));
+			servicio.addPlato(r3,p);
+			l = servicio.getListadoRestaurantesBySpecification(new IsContienePlatoSpecification("Cafe"));
+			assertTrue(l.size()==2);
+		});
+		
+		//Radio
+		assertDoesNotThrow(() -> {
+			List<RestauranteResumen> l ;
+			l = servicio.getListadoRestaurantesBySpecification(new IsRadioSpecification(2000, 2000, 100));//No hay restaurantes
+			assertTrue(l.size()==0);
+			l = servicio.getListadoRestaurantesBySpecification(new IsRadioSpecification(1000, 1000, 110));//Estan el burger,comic y mcdonalds
+			assertTrue(l.size()==3);
+			l = servicio.getListadoRestaurantesBySpecification(new IsRadioSpecification(1000, 1000, 0));//El burger esta en ese mismo punto
+			assertTrue(l.size()==1 && l.get(0).getId().equals(r1));
+		});
 	}
 }

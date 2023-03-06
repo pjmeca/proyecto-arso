@@ -2,6 +2,8 @@ package arso.restaurantes.servicio;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import arso.especificacion.Specification;
 import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.FactoriaRepositorios;
 import arso.repositorio.Repositorio;
@@ -102,13 +104,18 @@ public class ServicioRestaurantes implements IServicioRestaurantes {
 		
 		Restaurante restaurante = getRestaurante(idRestaurante);
 		if(!restaurante.updatePlato(plato))
-			throw new RepositorioException("No existe nigún plato con nombre" + plato.getNombre() + " en el restaurante");	
+			throw new RepositorioException("No existe nigún plato con nombre" + plato.getNombre() + " en el restaurante");
+		update(restaurante);
 	}
 
 	@Override
 	public void removeRestaurante(String idRestaurante) throws RepositorioException, EntidadNoEncontradaException {
-		Restaurante restaurante = getRestaurante(idRestaurante);
-		repositorio.delete(restaurante);		
+		repositorio.delete(idRestaurante);		
+	}
+	
+	@Override
+	public void removeAll() throws RepositorioException, EntidadNoEncontradaException {
+		repositorio.removeAll();
 	}
 
 	@Override
@@ -133,6 +140,27 @@ public class ServicioRestaurantes implements IServicioRestaurantes {
 			}
 		}
 
+		return resultado;
+	}
+
+	@Override
+	public List<RestauranteResumen> getListadoRestaurantesBySpecification(Specification<Restaurante> especificacion)
+			throws RepositorioException, EntidadNoEncontradaException {
+		if(especificacion==null)
+			throw new RepositorioException("La especificacion no puede ser nula");
+		
+		List<RestauranteResumen> resultado = new ArrayList<>();
+		List<Restaurante> restaurantes = repositorio.getBySpecification(especificacion);		
+		
+		for(Restaurante r : restaurantes) {
+			RestauranteResumen resumen = new RestauranteResumen();
+			resumen.setId(r.getId());
+			resumen.setNombre(r.getNombre());
+			resumen.setLatitud(r.getLatitud());
+			resumen.setLongitud(r.getLongitud());
+			resultado.add(resumen);
+		}
+		
 		return resultado;
 	}
 }

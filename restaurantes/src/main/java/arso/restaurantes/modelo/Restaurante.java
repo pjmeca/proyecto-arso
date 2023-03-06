@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonId;
@@ -67,6 +68,12 @@ public class Restaurante implements Identificable, Specificable<Restaurante>, Cl
 	}
 	public void addSitioTuristico(SitioTuristico sitioTuristico) {
 		sitiosTuristicos.add(sitioTuristico);
+	}
+	public Plato getPlato(String nombre) {
+		Optional<Plato> p =  platos.stream().filter(pt -> pt.getNombre().equals(nombre)).findFirst();
+		if(!p.isPresent())
+			return null;
+		return p.get();
 	}
 	public Set<Plato> getPlatos() {
 		return platos;

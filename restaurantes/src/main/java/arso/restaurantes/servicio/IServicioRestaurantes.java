@@ -1,6 +1,8 @@
 package arso.restaurantes.servicio;
 
 import java.util.List;
+
+import arso.especificacion.Specification;
 import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.RepositorioException;
 import arso.restaurantes.modelo.Plato;
@@ -68,8 +70,18 @@ public interface IServicioRestaurantes {
 	 */
 	void removeRestaurante(String idRestaurante)  throws RepositorioException, EntidadNoEncontradaException;
 	
+	/*
+	 * Elimina todos los restaurantes del repositorio.
+	 */
+	void removeAll()  throws RepositorioException, EntidadNoEncontradaException;
+	
 	/**
-	 * Retorna un resumen de todos los Restaurantees.	
+	 * Retorna un resumen de todos los Restaurantes.	
 	 */
 	List<RestauranteResumen> getListadoRestaurantes() throws RepositorioException;
+	
+	/**
+	 * Retorna un resumen de todos los Restaurantes siguiendo el filtro.	
+	 */
+	List<RestauranteResumen> getListadoRestaurantesBySpecification(Specification<Restaurante> especificacion) throws RepositorioException, EntidadNoEncontradaException;
 }

@@ -2,16 +2,13 @@ package arso.restaurantes.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonRepresentation;
 
 public class SitioTuristico {
-
-	@BsonId
-	@BsonRepresentation(BsonType.OBJECT_ID)	
-	private String id;
 	
 	private String nombre;
 	private String descripcion; // de GeoNames
@@ -26,17 +23,6 @@ public class SitioTuristico {
 		categorias = new ArrayList<>();
 		linksExternos = new ArrayList<>();
 	}
-
-	
-	public String getId() {
-		return id;
-	}
-
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
 
 	public String getNombre() {
 		return nombre;
@@ -108,6 +94,26 @@ public class SitioTuristico {
 
 	public void setImagen(String imagen) {
 		this.imagen = imagen;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(categorias, descripcion, imagen, jsonUrl, linksExternos, nombre, resumen, wikipediaUrl);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SitioTuristico other = (SitioTuristico) obj;
+		return Objects.equals(categorias, other.categorias) && Objects.equals(descripcion, other.descripcion)
+				&& Objects.equals(imagen, other.imagen) && Objects.equals(jsonUrl, other.jsonUrl)
+				&& Objects.equals(linksExternos, other.linksExternos) && Objects.equals(nombre, other.nombre)
+				&& Objects.equals(resumen, other.resumen) && Objects.equals(wikipediaUrl, other.wikipediaUrl);
 	}
 	
 }

@@ -40,8 +40,8 @@ public class FactoriaRepositorios {
 			
 	}
 	
-	public static void resetRepositorios() {
-		repositorios = new HashMap<>();
-	}
+//	public static void resetRepositorios() {
+//		repositorios = new HashMap<>();
+//	}
 	
 }

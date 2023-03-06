@@ -7,8 +7,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import arso.especificacion.IsRadioSpecification;
 import arso.repositorio.RepositorioException;
+import arso.restaurantes.especificacion.IsRadioSpecification;
 import arso.restaurantes.modelo.Restaurante;
 
 public class RepositorioMemoriaTest {

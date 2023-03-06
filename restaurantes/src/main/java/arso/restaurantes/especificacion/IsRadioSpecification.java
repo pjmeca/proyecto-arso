@@ -1,5 +1,10 @@
-package arso.especificacion;
+package arso.restaurantes.especificacion;
 
+import org.bson.conversions.Bson;
+
+import com.mongodb.client.model.Filters;
+
+import arso.especificacion.Specification;
 import arso.restaurantes.modelo.Restaurante;
 
 public class IsRadioSpecification implements Specification<Restaurante> {
@@ -23,5 +28,12 @@ public class IsRadioSpecification implements Specification<Restaurante> {
 	}
 	
 	
-
+	 @Override
+	public Bson toBsonFilter() {
+		Bson lat1 = Filters.gte("latitud", latitud-radio);
+		Bson lat2 = Filters.lte("latitud", latitud+radio);
+		Bson lon1 = Filters.gte("longitud", longitud-radio);
+		Bson lon2 = Filters.lte("longitud", longitud+radio);
+		return Filters.and(lat1,lat2,lon1,lon2);
+	}
 }
