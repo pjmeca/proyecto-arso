@@ -7,10 +7,12 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+
 import arso.restaurantes.dom.BuscadorGeoNames;
 import arso.restaurantes.modelo.SitioTuristico;
 

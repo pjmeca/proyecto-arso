@@ -3,8 +3,10 @@ package arso.especificacion;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.mongodb.client.model.Filters;
+
 import org.bson.conversions.Bson;
+
+import com.mongodb.client.model.Filters;
 
 public class AndSpecification<T> implements Specification<T> {
 

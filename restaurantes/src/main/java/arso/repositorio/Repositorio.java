@@ -3,7 +3,6 @@ package arso.repositorio;
 import java.util.List;
 
 import arso.especificacion.Specification;
-import arso.restaurantes.modelo.Restaurante;
 
 /*
  *  Repositorio para entidades gestionadas con identificador.
