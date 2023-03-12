@@ -34,7 +34,7 @@ public class FactoriaServicios {
 			}
 			catch (Exception e) {
 				
-				throw new RuntimeException("No se ha podido obtener la implementación del servicio: " + servicio.getName());
+				throw new RuntimeException("No se ha podido obtener la implementacion del servicio: " + servicio.getName());
 			}
 			
 	}

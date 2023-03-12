@@ -1,5 +1,8 @@
 package arso.restaurantes.modelo;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Plato {
 
 	private String nombre;

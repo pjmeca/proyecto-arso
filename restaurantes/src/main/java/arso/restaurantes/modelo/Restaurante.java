@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
 import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonRepresentation;
@@ -13,6 +16,7 @@ import arso.especificacion.Specificable;
 import arso.especificacion.Specification;
 import arso.restaurantes.repositorio.Identificable;
 
+@XmlRootElement
 public class Restaurante implements Identificable, Specificable<Restaurante>, Cloneable{
 	
 	@BsonId

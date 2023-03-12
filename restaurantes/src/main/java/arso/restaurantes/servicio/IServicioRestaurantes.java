@@ -43,6 +43,13 @@ public interface IServicioRestaurantes {
 	void setSitiosTuristicosDestacados(String idRestaurante, List<SitioTuristico> sitios) throws RepositorioException, EntidadNoEncontradaException ;
 	
 	/**
+	 * Consulta si el restaurante contiene un plato
+	 * @param El id debe pertenecer a un restaurante valido respecto al modelo de dominio
+	 * @param El nombre del plato único en el restaurante
+	 */
+	boolean contienePlato(String idRestaurante, String nombre) throws RepositorioException, EntidadNoEncontradaException ;
+	
+	/**
 	 * Añade un plato al restaurante
 	 * @param El id debe pertenecer a un restaurante valido respecto al modelo de dominio
 	 * @param El plato debe contener un nombre único en el restaurante
@@ -62,7 +69,6 @@ public interface IServicioRestaurantes {
 	 * @param Plato debe contener un nombre único en el restaurante y formar parte del mismo
 	 */
 	void updatePlato(String idRestaurante, Plato plato) throws RepositorioException, EntidadNoEncontradaException;
-	
 	
 	/**
 	 * Elimina un Restaurante.

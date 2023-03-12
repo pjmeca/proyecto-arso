@@ -74,6 +74,12 @@ public class ServicioRestaurantes implements IServicioRestaurantes {
 		restaurante.setSitiosTuristicos(sitios);
 		update(restaurante);
 	}
+	
+	@Override
+	public boolean contienePlato(String idRestaurante, String nombre) throws RepositorioException, EntidadNoEncontradaException {
+		Restaurante restaurante = getRestaurante(idRestaurante);
+		return restaurante.getPlato(nombre) != null;
+	}
 
 	@Override
 	public void addPlato(String idRestaurante, Plato plato) throws RepositorioException, EntidadNoEncontradaException {

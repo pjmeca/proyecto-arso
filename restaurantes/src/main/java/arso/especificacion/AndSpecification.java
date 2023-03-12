@@ -15,6 +15,10 @@ public class AndSpecification<T> implements Specification<T> {
     public AndSpecification(Specification<T>... specifications) {
         this.specifications = Arrays.asList(specifications);
     }
+    
+    public AndSpecification(List<Specification<T>> specifications) {
+        this.specifications = specifications;
+    }
 
     public boolean isSatisfied(T object) {
         return specifications.stream().allMatch(s -> { return s.isSatisfied(object); });
