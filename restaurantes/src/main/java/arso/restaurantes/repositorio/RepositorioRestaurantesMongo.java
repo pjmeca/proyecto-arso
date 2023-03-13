@@ -36,8 +36,13 @@ public class RepositorioRestaurantesMongo implements RepositorioString<Restauran
 	private MongoCollection<Restaurante> restaurantes;
 	
 	public RepositorioRestaurantesMongo() {
+		//ConnectionString connectionString = new ConnectionString(
+		//		"mongodb+srv://arso:arso@cluster0.yhy3vkv.mongodb.net/?retryWrites=true&w=majority");
+		
+		// Para que jetty funcione hay que usar el driver 3.3
 		ConnectionString connectionString = new ConnectionString(
-				"mongodb+srv://arso:arso@cluster0.yhy3vkv.mongodb.net/?retryWrites=true&w=majority");
+				"mongodb://arso:<password>@ac-muzzzdk-shard-00-00.yhy3vkv.mongodb.net:27017,ac-muzzzdk-shard-00-01.yhy3vkv.mongodb.net:27017,ac-muzzzdk-shard-00-02.yhy3vkv.mongodb.net:27017/?ssl=true&replicaSet=atlas-gvuc5f-shard-0&authSource=admin&retryWrites=true&w=majority");
+				
 
 		CodecRegistry pojoCodecRegistry = 
 				CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build());
