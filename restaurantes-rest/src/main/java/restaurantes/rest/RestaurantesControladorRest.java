@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -41,7 +42,6 @@ import restaurantes.rest.ListadoResumenRestaurantes.ResumenExtendido;
 
 @Api
 @Path("restaurantes")
-
 public class RestaurantesControladorRest {
 
 	private IServicioRestaurantes servicio = FactoriaServicios.getServicio(IServicioRestaurantes.class);
@@ -53,7 +53,7 @@ public class RestaurantesControladorRest {
 	
 	@GET
 	@Path("/{id}")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Consulta un restaurante", notes = "Retorna un restaurante utilizando su id", response = Restaurante.class)
 	@ApiResponses(value = { @ApiResponse(code = HttpServletResponse.SC_OK, message = ""),
 			@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "Restaurante no encontrado") })
@@ -69,7 +69,7 @@ public class RestaurantesControladorRest {
 	// No hay que agregar ningún fragmento al path
 
 	@POST
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response create(Restaurante restaurante) throws Exception {
 
 		String id = servicio.create(restaurante);
@@ -84,7 +84,7 @@ public class RestaurantesControladorRest {
 
 	@PUT
 	@Path("/{id}")
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response update(@PathParam("id") String id, Restaurante restaurante) throws Exception {
 
 		if (!id.equals(restaurante.getId()))
@@ -111,7 +111,7 @@ public class RestaurantesControladorRest {
 	
 	@GET
 	@Path("/{id}/sitiosProximos")
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Obtiene la lista de sitios turísticos próximos al restaurante", notes = "Retorna los sitios próximos de un restaurante utilizando su id", response = SitioTuristico.class)
 	@ApiResponses(value = { @ApiResponse(code = HttpServletResponse.SC_OK, message = ""),
 			@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "Restaurante no encontrado") })
@@ -120,7 +120,7 @@ public class RestaurantesControladorRest {
 
 		ListadoSitioTuristico l = new ListadoSitioTuristico();
 		l.set(servicio.getSitiosTuristicosProximos(id));
-		return Response.ok(l,MediaType.APPLICATION_XML).build();
+		return Response.ok(l,MediaType.APPLICATION_JSON).build();
 	}
 
 	private Response getListadoRestaurantes(List<RestauranteResumen> resultado) throws Exception {
@@ -153,7 +153,7 @@ public class RestaurantesControladorRest {
 	// curl -H "Accept: application/json" http://localhost:8080/api/restaurantes
 	
 	@GET
-	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getListadoRestaurantes(
 			@QueryParam("radio") @DefaultValue("-1") int radio, 
             @QueryParam("latitud") @DefaultValue("100") double latitud, 
@@ -176,7 +176,7 @@ public class RestaurantesControladorRest {
 	// addPlato
 	@PUT
 	@Path("/{restaurante}/plato/add")
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addPlato(@PathParam("restaurante") String id, Plato plato) throws Exception {
 		
 		if(!servicio.contienePlato(id, plato.getNombre())) {
@@ -193,7 +193,7 @@ public class RestaurantesControladorRest {
 	// updatePlato
 	@PUT
 	@Path("/{restaurante}/plato/update")
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updatePlato(@PathParam("restaurante") String id, Plato plato) throws Exception {
 		
 		if(!servicio.contienePlato(id, plato.getNombre()))
@@ -207,7 +207,7 @@ public class RestaurantesControladorRest {
 	// removePlato
 	@DELETE
 	@Path("/{restaurante}/plato")
-	public Response removePlato(@PathParam("restaurante") String id, @QueryParam("nombre") String nombre) throws Exception {
+	public Response removePlato(@PathParam("restaurante") String id, @FormParam("nombre") String nombre) throws Exception {
 		
 		if(!servicio.contienePlato(id, nombre))
 			throw new EntidadNoEncontradaException("El restaurante: " + id + " no contiene el plato: " + nombre);			
