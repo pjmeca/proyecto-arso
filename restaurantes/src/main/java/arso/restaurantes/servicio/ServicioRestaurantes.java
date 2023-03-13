@@ -21,6 +21,15 @@ public class ServicioRestaurantes implements IServicioRestaurantes {
 		repositorio = FactoriaRepositorios.getRepositorio(Restaurante.class);
 	}
 
+	private boolean contiene(String restauranteId) {
+		try {
+			getRestaurante(restauranteId);
+			return true;				
+		} catch (RepositorioException | EntidadNoEncontradaException e) {
+			return false;
+		}
+	}
+	
 	@Override
 	public String create(Restaurante restaurante) throws RepositorioException {
 		if(restaurante == null)
@@ -28,14 +37,8 @@ public class ServicioRestaurantes implements IServicioRestaurantes {
 		if(restaurante.getNombre() == null || restaurante.getNombre().isBlank())
 			throw new RepositorioException("El restaurante no tiene nombre.");
 		if(restaurante.getId() != null) {
-			boolean lanzada = false;
-			try {
-				getRestaurante(restaurante.getId());
-				lanzada = true;				
-			} catch (RepositorioException | EntidadNoEncontradaException e) {}
-			
-			if(lanzada)
-				throw new RepositorioException("El restaurante ya existe en el repositorio.");
+			if(contiene(restaurante.getId()))
+				throw new RepositorioException("El restaurante ya existe.");
 		}
 			
 		return repositorio.add(restaurante);
@@ -110,12 +113,15 @@ public class ServicioRestaurantes implements IServicioRestaurantes {
 		
 		Restaurante restaurante = getRestaurante(idRestaurante);
 		if(!restaurante.updatePlato(plato))
-			throw new RepositorioException("No existe nigún plato con nombre" + plato.getNombre() + " en el restaurante");
+			throw new EntidadNoEncontradaException("No existe nigún plato con nombre" + plato.getNombre() + " en el restaurante");
 		update(restaurante);
 	}
 
 	@Override
 	public void removeRestaurante(String idRestaurante) throws RepositorioException, EntidadNoEncontradaException {
+		if(idRestaurante==null | idRestaurante.isBlank()){
+			throw new IllegalArgumentException("El id no es valido");
+		}
 		repositorio.delete(idRestaurante);		
 	}
 	
