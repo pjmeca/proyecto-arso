@@ -69,7 +69,7 @@ public class RepositorioRestaurantesMongo implements RepositorioString<Restauran
 	public void update(Restaurante entity) throws RepositorioException, EntidadNoEncontradaException {
 		
 		if(entity.getId() == null || !ObjectId.isValid(entity.getId()) )
-			throw new EntidadNoEncontradaException("El id: "+entity.getId() +" del restaurante no es válido.");
+			throw new EntidadNoEncontradaException("El id: "+entity.getId() +" no es válido.");
 		
 		//UpdateResult result = restaurantes.replaceOne(Filters.eq("id", entity.getId()), entity);
 		UpdateResult result = restaurantes.replaceOne(Filters.eq("_id", new ObjectId(entity.getId())), entity);
@@ -105,7 +105,7 @@ public class RepositorioRestaurantesMongo implements RepositorioString<Restauran
 		Restaurante restaurante = r.first();
 		
 		if(restaurante == null)
-			throw new EntidadNoEncontradaException(id + " no existe");
+			throw new EntidadNoEncontradaException("El restaurante " + id + " no existe");
 		return restaurante;
 	}
 	

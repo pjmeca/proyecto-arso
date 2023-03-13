@@ -3,7 +3,6 @@ package arso.restaurantes.repositorio;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import arso.especificacion.Specification;
 import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.RepositorioException;
@@ -14,11 +13,13 @@ import arso.utils.Utils;
 public class RepositorioRestaurantesMemoria implements RepositorioString<Restaurante>{
 	
 	private HashMap<String, Restaurante> mapa = new HashMap<>();
+	private static int contadorId = 0;
 
 	@Override
 	public String add(Restaurante entity) throws RepositorioException {
 		
-		String id = Utils.createId();
+		//String id = Utils.createId();
+		String id = ++contadorId + ""; // para las pruebas, mejor que cree los id secuencialmente
 		
 		entity.setId(id);
 		mapa.put(id, entity);
