@@ -32,12 +32,12 @@ public class RepositorioTest extends RepositorioRestaurantesMemoria {
 		sitio.setResumen("Resumen");
 		restaurante1.addSitioTuristico(sitio);
 		
-		// Actividad 2
+		// Restaurante 2
         
    		Restaurante restaurante2 = new Restaurante();
 		restaurante2.setNombre("Restaurante2");
-		restaurante2.setLatitud(37.980260);
-		restaurante2.setLongitud(-1.129792);
+		restaurante2.setLatitud(100);
+		restaurante2.setLongitud(100);
 		Plato platoR21 = new Plato();
 		platoR21.setNombre("Plato R21");
 		platoR21.setDescripcion("Muy rico");
@@ -49,9 +49,9 @@ public class RepositorioTest extends RepositorioRestaurantesMemoria {
 		platoR22.setPrecio(3);
 		restaurante2.addPlato(platoR22);
 		SitioTuristico sitio2 = new SitioTuristico();
-		sitio.setNombre("Plaza");
-		sitio.setDescripcion("Descri");
-		sitio.setResumen("Melon");
+		sitio2.setNombre("Plaza");
+		sitio2.setDescripcion("Descri");
+		sitio2.setResumen("Melon");
 		restaurante2.addSitioTuristico(sitio2);
 		
 		try {

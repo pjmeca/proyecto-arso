@@ -210,9 +210,9 @@ public class RestaurantesControladorRest {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Añade un plato", notes = "Añade un plato de un restaurante según su id"	)
 	@ApiResponses(value = { 
-			@ApiResponse(code = HttpServletResponse.SC_OK, message = ""),
+			@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = ""),
 			@ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "El restaurante ya contiene el plato"),
-			@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "El id del restaurante está vacío"),
+			@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "El id del restaurante está vacío"),
 			@ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "El plato es nulo")})
 	public Response addPlato(@ApiParam(value = "id del restaurante", required = true) @PathParam("restaurante") String id, 
 			@ApiParam(value = "plato que se desea añadir", required = true) Plato plato) throws Exception {
@@ -235,9 +235,9 @@ public class RestaurantesControladorRest {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Actualiza un plato", notes = "Actualiza un plato de un restaurante según su id")
 	@ApiResponses(value = { 
-			@ApiResponse(code = HttpServletResponse.SC_OK, message = ""),
+			@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = ""),
 			@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "El restaurante no contiene el plato"),
-			@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "No existe ningún restaurante con ese id"),
+			@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "No existe ningún restaurante con ese id"),
 			@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "El plato no puede ser nulo")})
 	public Response updatePlato(@ApiParam(value = "id del restaurante", required = true) @PathParam("restaurante") String id, 
 			@ApiParam(value = "plato a actualizar", required = true) Plato plato) throws Exception {
@@ -256,9 +256,9 @@ public class RestaurantesControladorRest {
 	@Path("/{restaurante}/plato")
 	@ApiOperation(value = "Elimina un plato", notes = "Elimina un plato de un restaurante según su id"	)
 	@ApiResponses(value = { 
-			@ApiResponse(code = HttpServletResponse.SC_OK, message = ""),
+			@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = ""),
 			@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "El restaurante no contiene el plato"),
-			@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "No existe ningún restaurante con ese id")})
+			@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "No existe ningún restaurante con ese id")})
 	public Response removePlato(@ApiParam(value = "id del restaurante", required = true) @PathParam("restaurante") String id, 
 			@ApiParam(value = "nombre del plato", required = true) @FormParam("nombre") String nombre) throws Exception {
 		
