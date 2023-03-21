@@ -36,8 +36,8 @@ public class RepositorioTest extends RepositorioRestaurantesMemoria {
         
    		Restaurante restaurante2 = new Restaurante();
 		restaurante2.setNombre("Restaurante2");
-		restaurante2.setLatitud(100);
-		restaurante2.setLongitud(100);
+		restaurante2.setLatitud(100.0);
+		restaurante2.setLongitud(100.0);
 		Plato platoR21 = new Plato();
 		platoR21.setNombre("Plato R21");
 		platoR21.setDescripcion("Muy rico");

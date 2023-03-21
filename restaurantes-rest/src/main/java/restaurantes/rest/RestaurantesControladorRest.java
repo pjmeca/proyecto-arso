@@ -176,7 +176,7 @@ public class RestaurantesControladorRest {
 		return Response.ok(listado).build();
 	}
 	
-	// curl -i -X GET -H "Accept: application/json" http://localhost:8080/api/restaurantes
+	// curl -i -X GET -H "Accept: application/json" http://localhost:8080/api/restaurantes?radio=-1&latitud=100&longitud=100&plato=
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -184,7 +184,7 @@ public class RestaurantesControladorRest {
 	@ApiResponses(value =
 			@ApiResponse(code = HttpServletResponse.SC_OK, message = ""))
 	public Response getListadoRestaurantes(
-			@ApiParam(value = "radio de búsqueda", required = false) @QueryParam("radio") @DefaultValue("-1") int radio, 
+			@ApiParam(value = "radio de búsqueda", required = false) @QueryParam("radio") @DefaultValue("-1") double radio, 
 			@ApiParam(value = "latitud desde la que iniciar la búsqueda", required = false) @QueryParam("latitud") @DefaultValue("100") double latitud, 
 			@ApiParam(value = "longitud desde la que iniciar la búsqueda", required = false) @QueryParam("longitud") @DefaultValue("100") double longitud,
 			@ApiParam(value = "nombre del plato por el que filtrar", required = false) @QueryParam("plato") @DefaultValue("") String plato

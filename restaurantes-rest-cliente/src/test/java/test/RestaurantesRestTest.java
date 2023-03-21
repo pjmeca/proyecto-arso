@@ -10,6 +10,9 @@ import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
+
+import restaurantes.ListadoRestaurantes;
+import restaurantes.ListadoSitioTuristico;
 import restaurantes.Plato;
 import restaurantes.Restaurante;
 import restaurantes.RestaurantesRetrofit;
@@ -60,10 +63,9 @@ class RestaurantesRestTest {
 	
 	@Test
 	void updateTest() throws IOException {		
-		Restaurante r = new Restaurante();		
+		Restaurante r = service.getRestaurante("2").execute().body();	
+		r.setId(null);
 		r.setNombre("Restaurante actualizado");
-		r.setPlatos(new HashSet<Plato>());
-		r.setSitiosTuristicos(new ArrayList<SitioTuristico>());	
 		
 		// Falla porque no tiene id
 		Response<Void> sinid = service.update("2", r).execute();
@@ -95,33 +97,33 @@ class RestaurantesRestTest {
 	@Test
 	void getSitiosProximosRestauranteTest() throws IOException {
 		// Falla porque el restaurante no existe
-		Response<List<SitioTuristico>> incorrecta = service.getSitiosProximosRestaurante("-1").execute();
+		Response<ListadoSitioTuristico> incorrecta = service.getSitiosProximosRestaurante("-1").execute();
 		assertTrue(incorrecta.code() == 404);
 		
 		// Correcta
-		Response<List<SitioTuristico>> correcta = service.getSitiosProximosRestaurante("1").execute();
-		assertTrue(incorrecta.code() == 200);
+		Response<ListadoSitioTuristico> correcta = service.getSitiosProximosRestaurante("1").execute();
+		assertTrue(correcta.code() == 200);
 		assertTrue(correcta.body() != null);
-		assertTrue(!correcta.body().isEmpty());
+		assertTrue(!correcta.body().getLista().isEmpty());
 	}
 
 	@Test
 	void getListadoRestaurantesTest() throws IOException {
 		// Buscar todos
-		Response<List<Restaurante>> res = service.getListadoRestaurantes(-1, 0, 0,"").execute();
-		assertTrue(res.body().size()>=2);
+		Response<ListadoRestaurantes> res = service.getListadoRestaurantes(-1, 0., 0,"").execute();
+		assertTrue(res.body().getRestaurantes().size()>=2);
 		// Nombre plato
-		Response<List<Restaurante>> res2 = service.getListadoRestaurantes(-1, 0, 0,"Plato R1").execute();
-		assertTrue(res2.body().size()==1);
+		Response<ListadoRestaurantes> res2 = service.getListadoRestaurantes(-1, 0, 0,"Plato R1").execute();
+		assertTrue(res2.body().getRestaurantes().size()==1);
 		//Radio busqueda
-		Response<List<Restaurante>> res3 = service.getListadoRestaurantes(10, 102, 102,"").execute();
-		assertTrue(res3.body().size()==1);
+		Response<ListadoRestaurantes> res3 = service.getListadoRestaurantes(10, 102.0, 102.0,"").execute();
+		assertTrue(res3.body().getRestaurantes().size()==1);
 		//Ambos
-		Response<List<Restaurante>> res4 = service.getListadoRestaurantes(10, 102, 102,"Plato R21").execute();
-		assertTrue(res4.body().size()==1);
+		Response<ListadoRestaurantes> res4 = service.getListadoRestaurantes(10, 102, 102,"Plato R21").execute();
+		assertTrue(res4.body().getRestaurantes().size()==1);
 		//Ninguno
-		Response<List<Restaurante>> res5 = service.getListadoRestaurantes(200, 0, 0,"Noexiste").execute();
-		assertTrue(res5.body().size()==0);
+		Response<ListadoRestaurantes> res5 = service.getListadoRestaurantes(200, 0, 0,"Noexiste").execute();
+		assertTrue(res5.body().getRestaurantes().size()==0);
 	}
 
 	@Test

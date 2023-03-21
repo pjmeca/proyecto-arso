@@ -29,10 +29,10 @@ public interface RestaurantesRetrofit {
 		Call<Void> removeRestaurante(@Path("id") String id);
 		
 		@GET("restaurantes/{id}/sitiosProximos")
-		Call<List<SitioTuristico>> getSitiosProximosRestaurante(@Path("id") String id);
+		Call<ListadoSitioTuristico> getSitiosProximosRestaurante(@Path("id") String id);
 		
 		@GET("restaurantes")
-		Call<List<Restaurante>> getListadoRestaurantes(@Query("radio") int radio, @Query("latitud") double latitud, @Query("longitud") double longitud, @Query("plato") String plato); 	
+		Call<ListadoRestaurantes> getListadoRestaurantes(@Query("radio") double radio, @Query("latitud") double latitud, @Query("longitud") double longitud, @Query("plato") String plato); 	
 
 		@POST("restaurantes/{id}/plato")
 		Call<Void> addPlato(@Path("id") String id, @Body Plato plato); 

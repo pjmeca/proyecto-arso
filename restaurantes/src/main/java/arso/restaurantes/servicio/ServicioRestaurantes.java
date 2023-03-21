@@ -134,7 +134,6 @@ public class ServicioRestaurantes implements IServicioRestaurantes {
 	public List<RestauranteResumen> getListadoRestaurantes() throws RepositorioException {
 		
 		List<RestauranteResumen> resultado = new ArrayList<>();
-
 		
 		for (String id : repositorio.getIds()) {
 			try {

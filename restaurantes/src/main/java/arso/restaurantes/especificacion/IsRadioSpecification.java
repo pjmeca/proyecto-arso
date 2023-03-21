@@ -14,7 +14,7 @@ public class IsRadioSpecification implements Specification<Restaurante> {
 	public IsRadioSpecification(double latitud, double longitud, double radio) {
 		this.latitud = latitud;
 		this.longitud = longitud;
-		this.radio = radio;
+		this.radio = Math.abs(radio);
 	}
 
 	@Override
