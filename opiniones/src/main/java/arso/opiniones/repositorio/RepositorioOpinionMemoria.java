@@ -3,6 +3,8 @@ package arso.opiniones.repositorio;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+
 import arso.opiniones.modelo.Opinion;
 import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.RepositorioException;
@@ -11,12 +13,14 @@ import arso.repositorio.RepositorioString;
 public class RepositorioOpinionMemoria implements RepositorioString<Opinion>{
 	
 	private HashMap<String, Opinion> mapa = new HashMap<>();
+	private static int contadorId = 0;
 
 	@Override
 	public String add(Opinion entity) throws RepositorioException {
 		
-		//String id = Utils.createId();
-		String id = entity.getId();
+		String id = ++contadorId + ""; // para las pruebas, mejor que cree los id secuencialmente
+		
+		entity.setId(id);
 		mapa.put(id, entity);
 		
 		return id;
@@ -51,6 +55,15 @@ public class RepositorioOpinionMemoria implements RepositorioString<Opinion>{
 			throw new EntidadNoEncontradaException(id + " no existe");
 				
 		return mapa.get(id).clone();
+	}
+	
+	@Override
+	public Opinion getByNombre(String nombre) throws RepositorioException, EntidadNoEncontradaException {
+		Optional<Opinion> resultado = mapa.values().stream().filter(o -> o.getNombre().equals(nombre)).findFirst();
+		
+		if(!resultado.isPresent())
+			throw new EntidadNoEncontradaException("La opinion del recurso" + nombre + " no existe");
+		return resultado.get();
 	}
 
 	@Override

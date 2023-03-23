@@ -49,7 +49,7 @@ public class Programa {
 		v.setCalificacion(2);
 		servicio.addValoracion(id2, v);
 				
-		assert(servicio.getOpinion("prueba").equals(id1));
+		System.out.println(servicio.getOpinion(id1).toString());
 		
 		System.out.println(restaurantes.countDocuments());
 		

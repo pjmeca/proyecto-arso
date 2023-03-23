@@ -17,7 +17,7 @@ public class ServicioOpiniones implements IServicioOpiniones {
 	
 	private boolean contiene(String recurso) {
 		try {
-			repositorio.getById(recurso);
+			repositorio.getByNombre(recurso);
 			return true;				
 		} catch (RepositorioException | EntidadNoEncontradaException e) {
 			return false;
@@ -32,7 +32,7 @@ public class ServicioOpiniones implements IServicioOpiniones {
 			throw new RepositorioException("El recurso ya está registrado.");
 			
 		Opinion o = new Opinion();
-		o.setId(recurso);
+		o.setNombre(recurso);
 		return repositorio.add(o);
 	}
 

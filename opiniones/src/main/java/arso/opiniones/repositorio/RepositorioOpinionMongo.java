@@ -7,6 +7,7 @@ import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.types.ObjectId;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
@@ -61,7 +62,7 @@ public class RepositorioOpinionMongo implements RepositorioString<Opinion>{
 		InsertOneResult result = opiniones.insertOne(entity);
 		
 		if (result.getInsertedId() != null)
-            return result.getInsertedId().asString().getValue();
+			return result.getInsertedId().asObjectId().getValue().toString();
         return null;
 
 	}
@@ -69,11 +70,11 @@ public class RepositorioOpinionMongo implements RepositorioString<Opinion>{
 	@Override
 	public void update(Opinion entity) throws RepositorioException, EntidadNoEncontradaException {
 		
-		if(entity.getId() == null)
+		if(entity.getId() == null || !ObjectId.isValid(entity.getId()))
 			throw new EntidadNoEncontradaException("El id: "+entity.getId() +" no es válido.");
 		
 		//UpdateResult result = restaurantes.replaceOne(Filters.eq("id", entity.getId()), entity);
-		UpdateResult result = opiniones.replaceOne(Filters.eq("_id", entity.getId()), entity);
+		UpdateResult result = opiniones.replaceOne(Filters.eq("_id", new ObjectId(entity.getId())), entity);
 		
 		if(result.getMatchedCount() == 0)
 			throw new EntidadNoEncontradaException("No se ha encontrado la opinion con id: "+entity.getId());
@@ -90,18 +91,28 @@ public class RepositorioOpinionMongo implements RepositorioString<Opinion>{
 	
 	@Override
 	public void delete(String entityId) throws RepositorioException, EntidadNoEncontradaException {
-		DeleteResult resultado = opiniones.deleteOne(Filters.eq("_id", entityId));
+		DeleteResult resultado = opiniones.deleteOne(Filters.eq("_id", new ObjectId(entityId)));
 		if(resultado.getDeletedCount() == 0)
 			throw new EntidadNoEncontradaException("No existe la entidad.");
 	}
 
 	@Override
 	public Opinion getById(String id) throws RepositorioException, EntidadNoEncontradaException {
-		FindIterable<Opinion> r = opiniones.find(Filters.eq("_id", id));
+		FindIterable<Opinion> r = opiniones.find(Filters.eq("_id", new ObjectId(id)));
 		Opinion restaurante = r.first();
 		
 		if(restaurante == null)
 			throw new EntidadNoEncontradaException("La opinion " + id + " no existe");
+		return restaurante;
+	}
+	
+	@Override
+	public Opinion getByNombre(String nombre) throws RepositorioException, EntidadNoEncontradaException {
+		FindIterable<Opinion> r = opiniones.find(Filters.eq("nombre", nombre));
+		Opinion restaurante = r.first();
+		
+		if(restaurante == null)
+			throw new EntidadNoEncontradaException("La opinion del recurso" + nombre + " no existe");
 		return restaurante;
 	}
 

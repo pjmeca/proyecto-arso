@@ -21,6 +21,8 @@ public interface Repositorio <T, K> {
 
     T getById(K id) throws RepositorioException, EntidadNoEncontradaException;
     
+    T getByNombre(K nombre) throws RepositorioException, EntidadNoEncontradaException;
+    
 	List<T> getAll() throws RepositorioException;
 	
 	default void removeAll() throws RepositorioException, EntidadNoEncontradaException{
