@@ -1,5 +1,7 @@
 package arso.opiniones.servicio;
 
+import java.util.List;
+
 import arso.opiniones.modelo.Opinion;
 import arso.opiniones.modelo.Valoracion;
 import arso.repositorio.EntidadNoEncontradaException;
@@ -35,6 +37,11 @@ public class ServicioOpiniones implements IServicioOpiniones {
 		o.setNombre(recurso);
 		return repositorio.add(o);
 	}
+	
+	@Override
+	public Opinion crear(String recurso)  throws RepositorioException, EntidadNoEncontradaException {
+		return getOpinion(create(recurso));
+	}
 
 	@Override
 	public void addValoracion(String id, Valoracion valoracion) throws RepositorioException, EntidadNoEncontradaException {
@@ -67,5 +74,9 @@ public class ServicioOpiniones implements IServicioOpiniones {
 		repositorio.delete(id);		
 	}
 	
+	@Override
+	public List<Opinion> findAll() throws RepositorioException{
+		return repositorio.getAll();
+	}
 	
 }

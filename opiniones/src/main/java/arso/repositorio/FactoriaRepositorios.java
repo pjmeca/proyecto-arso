@@ -1,5 +1,6 @@
 package arso.repositorio;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,13 +29,14 @@ public class FactoriaRepositorios {
 				else {
 					PropertiesReader properties = new PropertiesReader(PROPERTIES);			
 					String clase = properties.getProperty(entidad.getName());
-					R repositorio = (R) Class.forName(clase).getConstructor().newInstance();
+					Constructor<?> ctor = Class.forName(clase).getConstructor();
+					R repositorio = (R) ctor.newInstance();
 					repositorios.put(entidad, repositorio);
 					return repositorio;
 				}
 			}
 			catch (Exception e) {
-				
+				e.printStackTrace();
 				throw new RuntimeException("No se ha podido obtener el repositorio para la entidad: " + entidad.getName());
 			}
 			

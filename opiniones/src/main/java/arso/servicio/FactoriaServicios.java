@@ -1,5 +1,6 @@
 package arso.servicio;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,12 +29,14 @@ public class FactoriaServicios {
 				else {
 					PropertiesReader properties = new PropertiesReader(PROPERTIES);			
 					String clase = properties.getProperty(servicio.getName());
-					return (T) Class.forName(clase).getConstructor().newInstance();
+					Class<?> c = Class.forName(clase);
+					Constructor<?> con = c.getConstructor();
+					return (T) con.newInstance();
 				}
 				
 			}
 			catch (Exception e) {
-				
+				e.printStackTrace();
 				throw new RuntimeException("No se ha podido obtener la implementacion del servicio: " + servicio.getName());
 			}
 			

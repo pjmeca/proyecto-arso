@@ -1,0 +1,22 @@
+# Copiar esto en GraphiQL
+query findAll {
+  findAll 
+  {
+    nombre
+  }
+},
+query getOpinion{
+  getOpinion(id : "641ca8e9c146350c5d92d66b")
+  {
+    nombre
+  }
+},
+mutation crear{
+  crearOpinion(recurso : "opinionDesdeGraphiQL")
+  {
+    nombre
+  }
+},
+mutation remove {
+  removeOpinion(id :"641ca8e9c146350c5d92d66b")
+}

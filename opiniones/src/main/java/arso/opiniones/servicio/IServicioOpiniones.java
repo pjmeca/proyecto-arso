@@ -1,5 +1,7 @@
 package arso.opiniones.servicio;
 
+import java.util.List;
+
 import arso.opiniones.modelo.Opinion;
 import arso.opiniones.modelo.Valoracion;
 import arso.repositorio.EntidadNoEncontradaException;
@@ -14,6 +16,12 @@ public interface IServicioOpiniones {
 	 * @return identificador de la opinión
 	 */
 	String create(String recurso) throws RepositorioException;
+	
+	/**
+	 * Método para registrar un recurso (crear una opinión).
+	 * @return el objeto opinión
+	 */
+	public Opinion crear(String recurso)  throws RepositorioException, EntidadNoEncontradaException;
 	
 	/**
 	 * Añade una valoración sobre un recurso.
@@ -32,5 +40,10 @@ public interface IServicioOpiniones {
 	 * @param id de la opinión
 	 */
 	void removeOpinion(String id)  throws RepositorioException, EntidadNoEncontradaException;
+	
+	/**
+	 * Devuelve todas las opiniones
+	 */
+	List<Opinion> findAll() throws RepositorioException; 
 	
 }
