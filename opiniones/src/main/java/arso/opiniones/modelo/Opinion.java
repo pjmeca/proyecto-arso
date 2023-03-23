@@ -3,10 +3,17 @@ package arso.opiniones.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.codecs.pojo.annotations.BsonIgnore;
+
 public class Opinion implements Cloneable{
 
 	private String id; // nombre
 	private List<Valoracion> valoraciones;
+	
+	@BsonIgnore
+	private int numValoraciones;
+	@BsonIgnore
+	private double calificacionMedia;
 	
 	public Opinion() {
 		valoraciones = new ArrayList<>();
@@ -28,6 +35,7 @@ public class Opinion implements Cloneable{
 		this.valoraciones = valoraciones;
 	}
 
+	
 	public int getNumValoraciones(){
 		return valoraciones.size();
 	}

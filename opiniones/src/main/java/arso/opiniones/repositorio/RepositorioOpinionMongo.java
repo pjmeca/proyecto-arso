@@ -2,11 +2,12 @@ package arso.opiniones.repositorio;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.bson.Document;
 import org.bson.codecs.configuration.CodecRegistries;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
-import org.bson.types.ObjectId;
+
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.ServerApi;
@@ -20,6 +21,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
+
 import arso.opiniones.modelo.Opinion;
 import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.RepositorioException;
@@ -59,7 +61,7 @@ public class RepositorioOpinionMongo implements RepositorioString<Opinion>{
 		InsertOneResult result = opiniones.insertOne(entity);
 		
 		if (result.getInsertedId() != null)
-            return result.getInsertedId().asObjectId().getValue().toString();
+            return result.getInsertedId().asString().getValue();
         return null;
 
 	}
@@ -67,7 +69,7 @@ public class RepositorioOpinionMongo implements RepositorioString<Opinion>{
 	@Override
 	public void update(Opinion entity) throws RepositorioException, EntidadNoEncontradaException {
 		
-		if(entity.getId() == null || !ObjectId.isValid(entity.getId()) )
+		if(entity.getId() == null)
 			throw new EntidadNoEncontradaException("El id: "+entity.getId() +" no es válido.");
 		
 		//UpdateResult result = restaurantes.replaceOne(Filters.eq("id", entity.getId()), entity);
