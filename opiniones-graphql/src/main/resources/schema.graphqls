@@ -1,5 +1,5 @@
 type Opinion {
-  id: String!
+  id: ID!
   nombre: String!
   valoraciones: [Valoracion]
   numValoraciones: Int
@@ -10,7 +10,7 @@ type Valoracion {
   correo: String!
   fecha: String!
   calificacion: Float!
-  comentario: String!
+  comentario: String
 }
 
 type Query {
@@ -20,7 +20,7 @@ type Query {
 
 type Mutation {
   crearOpinion(recurso: String!): Opinion
-  addValoracion(id: String!, valoracion: Valoracion!): String
+  addValoracion(id: ID!, correo: String!, fecha: String!, calificacion: Float!, comentario: String): Valoracion
   removeOpinion(id: String!): String 
 }
 

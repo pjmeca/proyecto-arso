@@ -6,7 +6,7 @@ public class Valoracion {
 
 	private String correo;
 	private LocalDateTime fecha;
-	private double calificacion;
+	private float calificacion;
 	private String comentario;
 	
 	public Valoracion() {
@@ -29,11 +29,11 @@ public class Valoracion {
 		this.fecha = fecha;
 	}
 
-	public double getCalificacion() {
+	public float getCalificacion() {
 		return calificacion;
 	}
 
-	public void setCalificacion(double calificacion) {
+	public void setCalificacion(float calificacion) {
 		if(calificacion < 1 || calificacion > 5)
 			throw new IllegalArgumentException("La calificación debe encontrarse entre 1 y 5.");
 		

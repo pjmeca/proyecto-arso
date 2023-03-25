@@ -1,12 +1,13 @@
 # Copiar esto en GraphiQL
-query findAll {
+query mostrarTodo {
   findAll 
   {
+    id, 
     nombre
   }
-},
-query getOpinion{
-  getOpinion(id : "641ca8e9c146350c5d92d66b")
+},  
+query mostrarId {
+  getOpinion(id : "641ca94ec146350c5d92d66c")
   {
     nombre
   }
@@ -17,6 +18,18 @@ mutation crear{
     nombre
   }
 },
+mutation addValoracion {
+  addValoracion(
+    id : "641ca94ec146350c5d92d66c",
+    correo : "prueba@correo.com",
+    fecha : "2023-03-25T00:00",
+    calificacion : 4.7,
+    comentario : "Muy bueno todo"
+  )
+  {
+    correo
+  }
+}
 mutation remove {
-  removeOpinion(id :"641ca8e9c146350c5d92d66b")
+  removeOpinion(id :"641c8a0729514b0a8bb50064")
 }

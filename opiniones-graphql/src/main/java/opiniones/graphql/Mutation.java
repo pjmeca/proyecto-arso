@@ -1,5 +1,7 @@
 package opiniones.graphql;
 
+import java.time.LocalDateTime;
+
 import com.coxautodev.graphql.tools.GraphQLRootResolver;
 
 import arso.opiniones.modelo.Opinion;
@@ -18,9 +20,14 @@ public class Mutation implements GraphQLRootResolver {
     	return servicio.crear(recurso);
     }
     
-    public String addValoracion(String id, Valoracion valoracion) throws RepositorioException, EntidadNoEncontradaException {
-		servicio.addValoracion(id, valoracion);
-		return id;
+    public Valoracion addValoracion(String id, String correo, String fecha, float calificacion, String comentario) throws RepositorioException, EntidadNoEncontradaException {
+		Valoracion valoracion = new Valoracion();
+		valoracion.setCorreo(correo);
+		valoracion.setFecha(LocalDateTime.parse(fecha));
+		valoracion.setCalificacion(calificacion);
+		valoracion.setComentario(comentario);
+    	servicio.addValoracion(id, valoracion);
+		return valoracion;
 	}
 	
 	public String removeOpinion(String id) throws RepositorioException, EntidadNoEncontradaException{

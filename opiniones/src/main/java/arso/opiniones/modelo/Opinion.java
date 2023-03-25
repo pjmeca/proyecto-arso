@@ -3,8 +3,6 @@ package arso.opiniones.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.bson.BsonType;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.codecs.pojo.annotations.BsonIgnore;
@@ -22,7 +20,7 @@ public class Opinion implements Cloneable{
 	@BsonIgnore
 	private int numValoraciones;
 	@BsonIgnore
-	private double calificacionMedia;
+	private float calificacionMedia;
 	
 	public Opinion() {
 		valoraciones = new ArrayList<>();
@@ -57,8 +55,8 @@ public class Opinion implements Cloneable{
 		return valoraciones.size();
 	}
 	
-	public double getCalificacionMedia(){
-		double nota=0;
+	public float getCalificacionMedia(){
+		float nota=0;
 		for(Valoracion v : valoraciones){
 			nota+=v.getCalificacion();
 		}
