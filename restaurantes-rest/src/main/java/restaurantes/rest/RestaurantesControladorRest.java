@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -20,11 +21,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 
 import arso.especificacion.AndSpecification;
 import arso.especificacion.Specification;
 import arso.repositorio.EntidadNoEncontradaException;
+import arso.repositorio.RepositorioException;
 import arso.restaurantes.especificacion.IsContienePlatoSpecification;
 import arso.restaurantes.especificacion.IsRadioSpecification;
 import arso.restaurantes.modelo.Plato;
@@ -40,6 +43,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import restaurantes.rest.ListadoResumenRestaurantes.ResumenExtendido;
 import restaurantes.rest.ListadoSitioTuristico.SitioTuristicoResumen;
+import restaurantes.rest.seguridad.AvailableRoles;
+import restaurantes.rest.seguridad.Secured;
 
 @Api
 @Path("restaurantes")
@@ -49,6 +54,9 @@ public class RestaurantesControladorRest {
 
 	@Context
 	private UriInfo uriInfo;
+	
+	@Context
+	private SecurityContext securityContext;
 	
 	// curl -i http://localhost:8080/api/restaurantes/1
 	
@@ -74,11 +82,19 @@ public class RestaurantesControladorRest {
 							@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "El restaurante no tiene nombre."),
 							@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "El restaurante ya existe.") })
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response create(Restaurante restaurante) throws Exception {
+	@Secured(AvailableRoles.GESTOR)
+	public Response create(Restaurante restaurante, @Context HttpServletRequest request, @Context UriInfo uriInfo) throws Exception {
 
+		restaurante.setIdGestor(securityContext.getUserPrincipal().getName());
+		
 		String id = servicio.create(restaurante);
-
-		URI nuevaURL = uriInfo.getAbsolutePathBuilder().path(id).build();
+		
+		String protocol = request.getHeader("X-Forwarded-Proto");
+		String host = request.getHeader("X-Forwarded-Host");
+		String resourceUrl = protocol + "://" + host + "/restaurantes/" + id;
+		URI nuevaURL = new URI(resourceUrl);
+		
+		nuevaURL = new URI(resourceUrl);
 
 		return Response.created(nuevaURL).build();
 	}
@@ -93,13 +109,16 @@ public class RestaurantesControladorRest {
 							@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "El restaurante es nulo."), 
 							@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "El restaurante no tiene nombre."),
 							@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "El id:id no es valido"),
-							@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "No se ha encontrado el restaurante con id : id")
-							})
+							@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "No se ha encontrado el restaurante con id : id"),
+							@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "Gestor no autorizado: id")})
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Secured(AvailableRoles.GESTOR)
 	public Response update(@PathParam("id") String id, Restaurante restaurante) throws Exception {
 
 		if (!id.equals(restaurante.getId()))
 			throw new IllegalArgumentException("El identificador no coincide: " + id);
+		if (!servicio.getRestaurante(id).getIdGestor().equals(securityContext.getUserPrincipal().getName()))
+			throw new RepositorioException("Gestor no autorizado: " + id);
 
 		servicio.update(restaurante);
 
@@ -114,11 +133,15 @@ public class RestaurantesControladorRest {
 	@ApiOperation(value="Elimina un restaurante", notes="No retorna nada")
 	@ApiResponses(value = { @ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = ""),
 							@ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "El id no es valido"),
-							@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "No existe la entidad"), 
-							
+							@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "No existe la entidad"),
+							@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "Gestor no autorizado: id")
 							})
+	@Secured(AvailableRoles.GESTOR)
 	public Response removeRestaurante(@PathParam("id") String id) throws Exception {
 
+		if (!servicio.getRestaurante(id).getIdGestor().equals(securityContext.getUserPrincipal().getName()))
+			throw new RepositorioException("Gestor no autorizado: " + id);
+		
 		servicio.removeRestaurante(id);
 
 		return Response.status(Response.Status.NO_CONTENT).build();
@@ -152,7 +175,7 @@ public class RestaurantesControladorRest {
 	}
 
 	
-	private Response getListadoRestaurantes(List<RestauranteResumen> resultado) throws Exception {
+	private Response getListadoRestaurantes(List<RestauranteResumen> resultado, HttpServletRequest request, UriInfo uriInfo) throws Exception {
  
 		LinkedList<ResumenExtendido> extendido = new LinkedList<>();
 
@@ -163,7 +186,10 @@ public class RestaurantesControladorRest {
 
 			// URL
 			String id = rResumen.getId();
-			URI nuevaURL = uriInfo.getAbsolutePathBuilder().path(id).build();
+			String protocol = request.getHeader("X-Forwarded-Proto");
+			String host = request.getHeader("X-Forwarded-Host");
+			String resourceUrl = protocol + "://" + host + "/restaurantes/" + id;
+			URI nuevaURL = new URI(resourceUrl);
 			resumenExtendido.setUrl(nuevaURL.toString()); // string
 			extendido.add(resumenExtendido);
 		}
@@ -187,7 +213,8 @@ public class RestaurantesControladorRest {
 			@ApiParam(value = "radio de búsqueda", required = false) @QueryParam("radio") @DefaultValue("-1") double radio, 
 			@ApiParam(value = "latitud desde la que iniciar la búsqueda", required = false) @QueryParam("latitud") @DefaultValue("100") double latitud, 
 			@ApiParam(value = "longitud desde la que iniciar la búsqueda", required = false) @QueryParam("longitud") @DefaultValue("100") double longitud,
-			@ApiParam(value = "nombre del plato por el que filtrar", required = false) @QueryParam("plato") @DefaultValue("") String plato
+			@ApiParam(value = "nombre del plato por el que filtrar", required = false) @QueryParam("plato") @DefaultValue("") String plato,
+			@Context HttpServletRequest request, @Context UriInfo uriInfo
             ) throws Exception {
 	
 		List<Specification<Restaurante>> especificaciones = new ArrayList<>();
@@ -197,9 +224,9 @@ public class RestaurantesControladorRest {
 			especificaciones.add(new IsContienePlatoSpecification(plato));
 		
 		if(especificaciones.size() == 0)
-			return getListadoRestaurantes(servicio.getListadoRestaurantes());
+			return getListadoRestaurantes(servicio.getListadoRestaurantes(), request, uriInfo);
 		Specification<Restaurante> esp = new AndSpecification<Restaurante>(especificaciones);
-		return getListadoRestaurantes(servicio.getListadoRestaurantesBySpecification(esp));
+		return getListadoRestaurantes(servicio.getListadoRestaurantesBySpecification(esp), request, uriInfo);
 	}	
 
 
@@ -213,9 +240,14 @@ public class RestaurantesControladorRest {
 			@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = ""),
 			@ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "El restaurante ya contiene el plato"),
 			@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "El id del restaurante está vacío"),
-			@ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "El plato es nulo")})
+			@ApiResponse(code = HttpServletResponse.SC_BAD_REQUEST, message = "El plato es nulo"),
+			@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "Gestor no autorizado: id")})
+	@Secured(AvailableRoles.GESTOR)
 	public Response addPlato(@ApiParam(value = "id del restaurante", required = true) @PathParam("restaurante") String id, 
 			@ApiParam(value = "plato que se desea añadir", required = true) Plato plato) throws Exception {
+		
+		if (!servicio.getRestaurante(id).getIdGestor().equals(securityContext.getUserPrincipal().getName()))
+			throw new RepositorioException("Gestor no autorizado: " + id);
 		
 		if(!servicio.contienePlato(id, plato.getNombre())) {
 			// añadir
@@ -238,9 +270,14 @@ public class RestaurantesControladorRest {
 			@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = ""),
 			@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "El restaurante no contiene el plato"),
 			@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "No existe ningún restaurante con ese id"),
-			@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "El plato no puede ser nulo")})
+			@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "El plato no puede ser nulo"),
+			@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "Gestor no autorizado: id")})
+	@Secured(AvailableRoles.GESTOR)
 	public Response updatePlato(@ApiParam(value = "id del restaurante", required = true) @PathParam("restaurante") String id, 
 			@ApiParam(value = "plato a actualizar", required = true) Plato plato) throws Exception {
+		
+		if (!servicio.getRestaurante(id).getIdGestor().equals(securityContext.getUserPrincipal().getName()))
+			throw new RepositorioException("Gestor no autorizado: " + id);
 		
 		if(!servicio.contienePlato(id, plato.getNombre()))
 			throw new EntidadNoEncontradaException("El restaurante: " + id + " no contiene el plato: " + plato.getNombre());			
@@ -258,9 +295,14 @@ public class RestaurantesControladorRest {
 	@ApiResponses(value = { 
 			@ApiResponse(code = HttpServletResponse.SC_NO_CONTENT, message = ""),
 			@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "El restaurante no contiene el plato"),
-			@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "No existe ningún restaurante con ese id")})
+			@ApiResponse(code = HttpServletResponse.SC_NOT_FOUND, message = "No existe ningún restaurante con ese id"),
+			@ApiResponse(code = HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message = "Gestor no autorizado: id")})
+	@Secured(AvailableRoles.GESTOR)
 	public Response removePlato(@ApiParam(value = "id del restaurante", required = true) @PathParam("restaurante") String id, 
 			@ApiParam(value = "nombre del plato", required = true) @FormParam("nombre") String nombre) throws Exception {
+		
+		if (!servicio.getRestaurante(id).getIdGestor().equals(securityContext.getUserPrincipal().getName()))
+			throw new RepositorioException("Gestor no autorizado: " + id);
 		
 		if(!servicio.contienePlato(id, nombre))
 			throw new EntidadNoEncontradaException("El restaurante: " + id + " no contiene el plato: " + nombre);			

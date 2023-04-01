@@ -24,7 +24,8 @@ public class Restaurante implements Identificable, Specificable<Restaurante>, Cl
 	private String id;
 	private String nombre;
 	private double latitud, longitud;
-	
+	private String idGestor;
+
 	private List<SitioTuristico> sitiosTuristicos;
 	private Set<Plato> platos;
 	
@@ -63,6 +64,12 @@ public class Restaurante implements Identificable, Specificable<Restaurante>, Cl
 	}
 	public void setLongitud(double longitud) {
 		this.longitud = longitud;
+	}
+	public String getIdGestor() {
+		return idGestor;
+	}
+	public void setIdGestor(String idGestor) {
+		this.idGestor = idGestor;
 	}
 	public List<SitioTuristico> getSitiosTuristicos() {
 		return sitiosTuristicos;

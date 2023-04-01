@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>arso</groupId>
-	<artifactId>restaurantes-rest</artifactId>
+	<artifactId>restaurantes-rest-seguridad</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>restaurantes-rest Maven Webapp</name>
+	<name>restaurantes-rest-seguridad Maven Webapp</name>
 	<!-- FIXME change it to the project's website -->
 	<url>http://www.example.com</url>
 
@@ -26,6 +26,13 @@
 <!--		    <artifactId>jaxb-api</artifactId>-->
 <!--		    <version>2.1</version>-->
 <!--		</dependency>-->
+
+		<!-- JWT -->
+		<dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.5.1</version>
+        </dependency>
 
 
 		<dependency>
@@ -83,7 +90,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>restaurantes-rest</finalName>
+		<finalName>restaurantes-rest-seguridad</finalName>
 		<pluginManagement>
 			<!-- lock down plugins versions to avoid using Maven 
 				defaults (may be moved to parent pom) -->
