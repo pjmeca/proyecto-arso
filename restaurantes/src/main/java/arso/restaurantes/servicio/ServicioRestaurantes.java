@@ -57,7 +57,8 @@ public class ServicioRestaurantes implements IServicioRestaurantes {
 	public Restaurante getRestaurante(String id) throws RepositorioException, EntidadNoEncontradaException {
 		if(id == null || id.isBlank()) // Mejor comprobarlo aquí para evitar llamadas al repositorio
 			throw new RepositorioException("El id está vacío.");
-		return repositorio.getById(id);
+		Restaurante r = repositorio.getById(id);
+		return r;
 	}
 
 	@Override

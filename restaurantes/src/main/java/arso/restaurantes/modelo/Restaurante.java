@@ -142,6 +142,7 @@ public class Restaurante implements Identificable, Specificable<Restaurante>, Cl
 	@Override
 	public Restaurante clone(){
 		Restaurante r = new Restaurante(this.nombre,this.latitud,this.longitud);
+		r.setIdGestor(this.idGestor);
 		r.setId(this.id);
 		r.setPlatos(new HashSet<>(this.platos));
 		r.setSitiosTuristicos(new ArrayList<>(this.sitiosTuristicos));
