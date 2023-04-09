@@ -55,7 +55,7 @@ public class RepositorioRestaurantesMongo implements RepositorioString<Restauran
 				.codecRegistry(codecRegistry)
 				.build();
 		MongoClient mongoClient = MongoClients.create(settings);
-		MongoDatabase database = mongoClient.getDatabase("test");
+		MongoDatabase database = mongoClient.getDatabase("arso");
 		restaurantes = database.getCollection("restaurantes", Restaurante.class);
 	}
 

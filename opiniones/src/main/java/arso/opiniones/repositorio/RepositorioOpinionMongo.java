@@ -52,7 +52,7 @@ public class RepositorioOpinionMongo implements RepositorioString<Opinion>{
 				.codecRegistry(codecRegistry)
 				.build();
 		MongoClient mongoClient = MongoClients.create(settings);
-		MongoDatabase database = mongoClient.getDatabase("test");
+		MongoDatabase database = mongoClient.getDatabase("arso");
 		opiniones = database.getCollection("opiniones", Opinion.class);
 	}
 
