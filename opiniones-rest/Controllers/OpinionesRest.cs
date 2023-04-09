@@ -4,6 +4,7 @@ using Opiniones.Servicio;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using Opiniones.Exceptions;
 
 namespace Opiniones.Controllers;
 
@@ -29,14 +30,7 @@ public class OpinionesController : ControllerBase
     [HttpGet("{id}", Name = "GetOpinion")]
     public ActionResult<Opinion> Get(string id)
     {
-        var entidad = _servicio.Get(id);
-
-        if (entidad == null)
-        {
-            return NotFound();
-        }
-
-        return entidad;
+        return _servicio.Get(id);
     }
 
     [HttpPost]
@@ -52,12 +46,17 @@ public class OpinionesController : ControllerBase
     {
         var opinion = _servicio.Get(id);
 
-        if (opinion == null)
-        {
-            return NotFound();
-        }
-
         _servicio.Delete(opinion);
+
+        return NoContent();
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult AddValoracion(string id, Valoracion valoracion)
+    {
+        var opinion = _servicio.Get(id);
+
+        _servicio.AddValoracion(id,valoracion);
 
         return NoContent();
     }

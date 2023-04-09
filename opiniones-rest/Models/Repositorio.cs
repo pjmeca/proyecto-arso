@@ -4,6 +4,7 @@ public interface Repositorio<T, K>
 {
 
     K Add(T entity);
+    void Update(T entity);
 
     void Delete(T entity);
 
