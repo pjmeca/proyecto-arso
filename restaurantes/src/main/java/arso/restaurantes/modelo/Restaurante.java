@@ -29,6 +29,10 @@ public class Restaurante implements Identificable, Specificable<Restaurante>, Cl
 	private List<SitioTuristico> sitiosTuristicos;
 	private Set<Plato> platos;
 	
+	private int numValoraciones, calificacionMedia;
+	@BsonRepresentation(BsonType.OBJECT_ID)
+	private String opinion;
+	
 	public Restaurante() {
 		sitiosTuristicos = new ArrayList<>();
 		platos = new HashSet<>();
@@ -112,15 +116,41 @@ public class Restaurante implements Identificable, Specificable<Restaurante>, Cl
 		else
 			return false;
 	}
+	
+
+	public int getNumValoraciones() {
+		return numValoraciones;
+	}
+
+	public void setNumValoraciones(int numValoraciones) {
+		this.numValoraciones = numValoraciones;
+	}
+
+	public int getCalificacionMedia() {
+		return calificacionMedia;
+	}
+
+	public void setCalificacionMedia(int calificacionMedia) {
+		this.calificacionMedia = calificacionMedia;
+	}
+
+	public String getOpinion() {
+		return opinion;
+	}
+
+	public void setOpinion(String opinion) {
+		this.opinion = opinion;
+	}
 
 	@Override
 	public boolean satisfies(Specification<Restaurante> specification) {
 		return specification.isSatisfied(this);
 	}
-
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, latitud, longitud, nombre, platos, sitiosTuristicos);
+		return Objects.hash(calificacionMedia, id, idGestor, latitud, longitud, nombre, numValoraciones, opinion,
+				platos, sitiosTuristicos);
 	}
 
 	@Override
@@ -132,13 +162,15 @@ public class Restaurante implements Identificable, Specificable<Restaurante>, Cl
 		if (getClass() != obj.getClass())
 			return false;
 		Restaurante other = (Restaurante) obj;
-		return Objects.equals(id, other.id)
+		return calificacionMedia == other.calificacionMedia && Objects.equals(id, other.id)
+				&& Objects.equals(idGestor, other.idGestor)
 				&& Double.doubleToLongBits(latitud) == Double.doubleToLongBits(other.latitud)
 				&& Double.doubleToLongBits(longitud) == Double.doubleToLongBits(other.longitud)
-				&& Objects.equals(nombre, other.nombre) && Objects.equals(platos, other.platos)
+				&& Objects.equals(nombre, other.nombre) && numValoraciones == other.numValoraciones
+				&& Objects.equals(opinion, other.opinion) && Objects.equals(platos, other.platos)
 				&& Objects.equals(sitiosTuristicos, other.sitiosTuristicos);
 	}
-	
+
 	@Override
 	public Restaurante clone(){
 		Restaurante r = new Restaurante(this.nombre,this.latitud,this.longitud);
@@ -146,6 +178,9 @@ public class Restaurante implements Identificable, Specificable<Restaurante>, Cl
 		r.setId(this.id);
 		r.setPlatos(new HashSet<>(this.platos));
 		r.setSitiosTuristicos(new ArrayList<>(this.sitiosTuristicos));
+		r.setNumValoraciones(numValoraciones);
+		r.setCalificacionMedia(calificacionMedia);
+		r.setOpinion(opinion);
 		return r;
 	}
 }

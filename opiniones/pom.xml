@@ -12,6 +12,14 @@
 		<dep.slf4j.version>1.7.30</dep.slf4j.version>
 	</properties>
 	<dependencies>
+		<!-- Librería para deserializar JSON -->
+		<dependency>
+		  <groupId>com.fasterxml.jackson.core</groupId>
+		  <artifactId>jackson-databind</artifactId>
+		  <version>2.12.5</version>
+		</dependency>
+
+		
 		<!--JAVAX-->
 		<dependency>
 			<groupId>javax.xml.bind</groupId>

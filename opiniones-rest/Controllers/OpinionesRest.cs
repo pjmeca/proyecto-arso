@@ -33,12 +33,13 @@ public class OpinionesController : ControllerBase
         return _servicio.Get(id);
     }
 
-    [HttpPost]
-    public ActionResult<Opinion> Create([FromForm] string nombre)
+    [HttpPost("{nombre}")]
+    public ActionResult<string> Create(string nombre)
     {
         string nuevoId = _servicio.Create(nombre);
+        Console.WriteLine(nuevoId);
 
-        return CreatedAtRoute("GetOpinion", new { id = nuevoId }, "");
+        return Ok(nuevoId);
     }
 
     [HttpDelete("{id}")]
@@ -59,5 +60,11 @@ public class OpinionesController : ControllerBase
         _servicio.AddValoracion(id,valoracion);
 
         return NoContent();
+    }
+
+    [HttpGet("{id}/valoraciones", Name = "GetValoraciones")]
+    public ActionResult<List<Valoracion>> GetValoraciones(string id) 
+    {
+        return _servicio.GetValoraciones(id);
     }
 }

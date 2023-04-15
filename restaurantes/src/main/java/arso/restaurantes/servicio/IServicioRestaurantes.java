@@ -3,6 +3,7 @@ package arso.restaurantes.servicio;
 import java.util.List;
 
 import arso.especificacion.Specification;
+import arso.opiniones.modelo.Valoracion;
 import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.RepositorioException;
 import arso.restaurantes.modelo.Plato;
@@ -90,4 +91,15 @@ public interface IServicioRestaurantes {
 	 * Retorna un resumen de todos los Restaurantes siguiendo el filtro.	
 	 */
 	List<RestauranteResumen> getListadoRestaurantesBySpecification(Specification<Restaurante> especificacion) throws RepositorioException, EntidadNoEncontradaException;
+	
+	/**
+	 * @param Da de alta un restaurante en el servicio de opiniones y almacena el id en el campo opinion del restaurante.
+	 */
+	public void altaOpiniones(String idRestaurante) throws RepositorioException, EntidadNoEncontradaException;
+	
+	/**
+	 * Recupera las valoraciones de un restaurante.
+	 * @param  El id del restaurante, debe haberse registrado previamente en el servicio opiniones. 
+	 */
+	public List<Valoracion> getValoraciones(String idRestaurante) throws RepositorioException, EntidadNoEncontradaException;
 }

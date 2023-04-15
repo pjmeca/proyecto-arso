@@ -10,7 +10,7 @@ import arso.repositorio.RepositorioException;
 public interface IServicioOpiniones {
 
 	/** 
-	 * Metodo para registrar un recuro.
+	 * Metodo para registrar un recurso.
 	 * 
 	 * @param nombre del recurso que será valorado
 	 * @return identificador de la opinión

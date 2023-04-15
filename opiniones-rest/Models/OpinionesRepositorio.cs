@@ -15,15 +15,19 @@ public class RepositorioOpinionesMongoDB : Repositorio<Opinion, string>
     public RepositorioOpinionesMongoDB()
     {
         var client = new MongoClient("mongodb+srv://arso:arso@cluster0.yhy3vkv.mongodb.net/?retryWrites=true&w=majority");
-        var database = client.GetDatabase("arso");
+        var database = client.GetDatabase("test");
 
         _opiniones = database.GetCollection<Opinion>("opiniones");
     }
 
     public string Add(Opinion entity)
     {
-        if(string.IsNullOrWhiteSpace(entity.Id))
-            throw new ArgumentException("El id: "+entity.Id +" no es válido.");
+        if(entity.Nombre is null || _opiniones.Find(o => o.Nombre == entity.Nombre).CountDocuments() > 0)
+        {
+            Console.WriteLine("Ya existe una opinión para el recurso: " + entity.Nombre);
+            throw new ArgumentException("Ya existe una opinión para el recurso: " + entity.Nombre);
+        }
+            
 
         _opiniones.InsertOne(entity);
 
@@ -70,6 +74,22 @@ public class RepositorioOpinionesMongoDB : Repositorio<Opinion, string>
 
         if(o is null)
             throw new EntidadNoEncontrada("No se ha encontrado ninguna opinión con id: "+id);
+
+        return o;
+    }
+
+    public Opinion GetByNombre(string recurso)
+    {
+        if(recurso is null || string.IsNullOrWhiteSpace(recurso)){
+			throw new ArgumentException("El id no es valido");
+		}
+        
+        Opinion o = _opiniones
+            .Find(opinion => opinion.Nombre == recurso)
+            .FirstOrDefault();
+
+        if(o is null)
+            throw new EntidadNoEncontrada("No se ha encontrado ninguna opinión para el recurso: "+recurso);
 
         return o;
     }

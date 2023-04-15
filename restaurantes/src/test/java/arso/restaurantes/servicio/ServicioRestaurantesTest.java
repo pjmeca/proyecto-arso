@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import arso.opiniones.modelo.Valoracion;
 import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.RepositorioException;
 import arso.restaurantes.especificacion.IsContienePlatoSpecification;
@@ -18,6 +19,7 @@ import arso.restaurantes.especificacion.IsRadioSpecification;
 import arso.restaurantes.modelo.Plato;
 import arso.restaurantes.modelo.Restaurante;
 import arso.restaurantes.modelo.SitioTuristico;
+import arso.utils.Utils;
 
 public class ServicioRestaurantesTest {
 
@@ -94,7 +96,7 @@ public class ServicioRestaurantesTest {
 		});
 		assertThrows(EntidadNoEncontradaException.class, () -> {
 			Restaurante r = new Restaurante("Pizza", 100, 100);
-			r.setId("1");
+			r.setId("-1");
 			servicio.update(r);
 		});
 
@@ -188,7 +190,7 @@ public class ServicioRestaurantesTest {
 		pMal.setNombre("prueba");
 		pMal.setDescripcion("");
 		pMal.setPrecio(10);
-		assertThrows(RepositorioException.class, () -> servicio.updatePlato(r1, pMal));
+		assertThrows(EntidadNoEncontradaException.class, () -> servicio.updatePlato(r1, pMal));
 		
 		// No debería fallar
 		Plato p = new Plato();
@@ -250,5 +252,54 @@ public class ServicioRestaurantesTest {
 			l = servicio.getListadoRestaurantesBySpecification(new IsRadioSpecification(1000, 1000, 0));//El burger esta en ese mismo punto
 			assertTrue(l.size()==1 && l.get(0).getId().equals(r1));
 		});
+	}
+	
+	@Test
+	public void altaOpinionesTest() throws RepositorioException, EntidadNoEncontradaException {
+		
+		String r1 = servicio.create(new Restaurante(Utils.createId(), 1000, 1000));
+		
+		// Falla
+		assertThrows(RepositorioException.class, () -> {
+			servicio.altaOpiniones("");
+		});		
+		assertThrows(EntidadNoEncontradaException.class, () -> {
+			servicio.altaOpiniones("id_inventado");
+		});		
+					
+		// Debería funcionar
+		assertTrue(servicio.getRestaurante(r1).getOpinion() == null);
+		assertDoesNotThrow(() -> {
+			servicio.altaOpiniones(r1);			
+		});		
+		System.out.println(servicio.getRestaurante(r1).getOpinion());
+		assertTrue(servicio.getRestaurante(r1).getOpinion() != null); //
+		
+		// Falla
+		assertThrows(RepositorioException.class, () -> {
+			servicio.altaOpiniones(r1); // ya se ha dado de alta
+		});			
+	}
+	
+	@Test
+	public void getValoraciones() throws RepositorioException, EntidadNoEncontradaException {
+		
+		assertThrows(RepositorioException.class, () -> servicio.getValoraciones(""));
+		assertThrows(RepositorioException.class, () -> servicio.getValoraciones(null));
+		assertThrows(RepositorioException.class, () -> servicio.getValoraciones(r2)); 
+		assertThrows(EntidadNoEncontradaException.class, () -> servicio.getValoraciones("noexiste"));
+		
+		Restaurante r = servicio.getRestaurante(r1);
+		r.setNombre(Utils.createId());
+		r.setOpinion("641ca986c146350c5d92d66d"); // poner el id de una opinión con valoraciones de Mongo
+												  // es importante poner una opinión que tenga fechas para probar que el deserializador funcione
+		servicio.update(r);
+		
+		assertDoesNotThrow(() -> {			
+			List<Valoracion> l;
+			l=servicio.getValoraciones(r1); // esta debe funcionar
+			System.out.println(l);
+		});
+		
 	}
 }

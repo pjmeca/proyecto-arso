@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arso.especificacion.Specification;
+import arso.opiniones.modelo.Valoracion;
+import arso.opiniones.servicio.IServicioOpiniones;
 import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.FactoriaRepositorios;
 import arso.repositorio.Repositorio;
@@ -12,10 +14,12 @@ import arso.restaurantes.dom.BuscadorGeoNames;
 import arso.restaurantes.modelo.Plato;
 import arso.restaurantes.modelo.Restaurante;
 import arso.restaurantes.modelo.SitioTuristico;
+import arso.servicio.FactoriaServicios;
 
 public class ServicioRestaurantes implements IServicioRestaurantes {
 
 	private Repositorio<Restaurante, String> repositorio;
+	private IServicioOpiniones opiniones = FactoriaServicios.getServicio(IServicioOpiniones.class); 
 	
 	public ServicioRestaurantes() {
 		repositorio = FactoriaRepositorios.getRepositorio(Restaurante.class);
@@ -175,4 +179,27 @@ public class ServicioRestaurantes implements IServicioRestaurantes {
 		
 		return resultado;
 	}
+	
+	@Override
+	public void altaOpiniones(String idRestaurante) throws RepositorioException, EntidadNoEncontradaException {
+		Restaurante r = getRestaurante(idRestaurante);
+		
+		String idOpinion = opiniones.altaOpiniones(r.getNombre());
+		
+		r.setOpinion(idOpinion);		
+		r.setCalificacionMedia(1);
+		r.setNumValoraciones(0);
+		update(r);
+	}
+	
+	@Override
+	public List<Valoracion> getValoraciones(String idRestaurante) throws RepositorioException, EntidadNoEncontradaException{
+		Restaurante r = getRestaurante(idRestaurante);
+		
+		if(r.getOpinion() == null || r.getOpinion().isBlank())
+			throw new RepositorioException("El restaurante: " + idRestaurante + " no se ha registrado en el servicio opiniones.");
+		
+		return opiniones.getValoraciones(r.getOpinion());
+	}
+	
 }

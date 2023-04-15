@@ -10,6 +10,7 @@ public interface IServicioOpiniones
     void Delete(Opinion opinion);
     void AddValoracion(string id, Valoracion valoracion);
     List<Opinion> GetAll();
+    List<Valoracion> GetValoraciones(string id);
 }
 
 public class ServicioOpiniones : IServicioOpiniones
@@ -56,4 +57,10 @@ public class ServicioOpiniones : IServicioOpiniones
 		
 		_repositorio.Update(opinion);
 	}
+
+    public List<Valoracion> GetValoraciones(string id) 
+    {
+        Opinion opinion = Get(id);
+        return opinion.Valoraciones;
+    }
 }
