@@ -28,12 +28,12 @@ public class ServicioOpinionesMock implements IServicioOpiniones {
 	
 	
 	@Override
-	public List<Valoracion> getValoraciones(String idRestaurante) throws RepositorioException{		
-		if(idRestaurante.isBlank())
+	public List<Valoracion> getValoraciones(String idOpinion) throws RepositorioException{		
+		if(idOpinion.isBlank())
 			throw new RepositorioException("El nombre del recurso no es válido.");
-		if(!recursos.contains(idRestaurante))
+		if(!idOpinion.equals(idPrueba))
 			throw new RepositorioException("El recurso no está registrado.");
-		
+			
 		List<Valoracion> lista = new ArrayList<>();
 		
 		Valoracion v = new Valoracion();
