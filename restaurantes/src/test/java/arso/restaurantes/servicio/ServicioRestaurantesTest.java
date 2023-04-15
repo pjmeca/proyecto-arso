@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import arso.opiniones.modelo.Valoracion;
-import arso.opiniones.servicio.ServicioOpinionesMock;
 import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.RepositorioException;
 import arso.restaurantes.especificacion.IsContienePlatoSpecification;
@@ -20,7 +19,6 @@ import arso.restaurantes.especificacion.IsRadioSpecification;
 import arso.restaurantes.modelo.Plato;
 import arso.restaurantes.modelo.Restaurante;
 import arso.restaurantes.modelo.SitioTuristico;
-import arso.servicio.FactoriaServicios;
 import arso.utils.Utils;
 
 public class ServicioRestaurantesTest {
