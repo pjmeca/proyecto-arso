@@ -1,3 +1,4 @@
+using Eventos;
 using Opiniones.Modelo;
 using Repositorio;
 
@@ -47,6 +48,14 @@ public class ServicioOpiniones : IServicioOpiniones
 
     public List<Opinion> GetAll() 
     {
+        Mensaje m = new() 
+        {
+            idOpinion = "id",
+            valoracion = new Valoracion(),
+            nValoraciones = 0,
+            calMedia = 1
+        };
+        EventoServicio.send(m);
         return _repositorio.GetAll();
     }
 
