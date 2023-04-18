@@ -50,10 +50,10 @@ public class ServicioOpiniones : IServicioOpiniones
     {
         Mensaje m = new() 
         {
-            idOpinion = "id",
-            valoracion = new Valoracion(),
-            nValoraciones = 0,
-            calMedia = 1
+            IdOpinion = "id",
+            Valoracion = new Valoracion(),
+            NumValoraciones = 0,
+            CalMedia = 1
         };
         EventoServicio.send(m);
         return _repositorio.GetAll();
