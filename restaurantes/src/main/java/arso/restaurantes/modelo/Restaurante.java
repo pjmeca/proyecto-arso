@@ -29,7 +29,8 @@ public class Restaurante implements Identificable, Specificable<Restaurante>, Cl
 	private List<SitioTuristico> sitiosTuristicos;
 	private Set<Plato> platos;
 	
-	private int numValoraciones, calificacionMedia;
+	private int numValoraciones;
+	private float calificacionMedia;
 	@BsonRepresentation(BsonType.OBJECT_ID)
 	private String opinion;
 	
@@ -126,11 +127,11 @@ public class Restaurante implements Identificable, Specificable<Restaurante>, Cl
 		this.numValoraciones = numValoraciones;
 	}
 
-	public int getCalificacionMedia() {
+	public float getCalificacionMedia() {
 		return calificacionMedia;
 	}
 
-	public void setCalificacionMedia(int calificacionMedia) {
+	public void setCalificacionMedia(float calificacionMedia) {
 		this.calificacionMedia = calificacionMedia;
 	}
 

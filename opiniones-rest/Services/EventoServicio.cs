@@ -14,7 +14,7 @@ public class Mensaje{
 
 }
 
-class EventoServicio 
+public class EventoServicio 
 {
     public const string URI = "amqps://dbuadusv:RUItokUvjf65IFZDxkDZ6J1Z3punicMq@rat.rmq2.cloudamqp.com/dbuadusv";
     public const string EXCHANGE = "amq.direct";
@@ -35,6 +35,11 @@ class EventoServicio
 
         var json = JsonConvert.SerializeObject(mensaje);
         var body = Encoding.UTF8.GetBytes(json);
+
+        channel.ExchangeDeclare(exchange: EXCHANGE,
+                                type: ExchangeType.Direct,
+                                durable: true,
+                                autoDelete: false);
 
         channel.BasicPublish(exchange: EXCHANGE,
                             routingKey: ROUTING_KEY,

@@ -47,15 +47,7 @@ public class ServicioOpiniones : IServicioOpiniones
     }
 
     public List<Opinion> GetAll() 
-    {
-        Mensaje m = new() 
-        {
-            IdOpinion = "id",
-            Valoracion = new Valoracion(),
-            NumValoraciones = 0,
-            CalMedia = 1
-        };
-        EventoServicio.send(m);
+    {        
         return _repositorio.GetAll();
     }
 
@@ -65,6 +57,16 @@ public class ServicioOpiniones : IServicioOpiniones
 		opinion.AddValoracion(valoracion);
 		
 		_repositorio.Update(opinion);
+
+        EventoServicio.send(
+            new() 
+            {
+                IdOpinion = opinion.Id,
+                Valoracion = valoracion,
+                NumValoraciones = opinion.NumValoraciones,
+                CalMedia = opinion.CalificacionMedia
+            }
+        );
 	}
 
     public List<Valoracion> GetValoraciones(string id) 

@@ -1,20 +1,19 @@
 package arso.opiniones.servicio;
 
 import java.io.IOException;
-import java.io.StringReader;
-
-import javax.json.Json;
-import javax.json.JsonReader;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
-
 import arso.opiniones.modelo.Valoracion;
+import arso.repositorio.EntidadNoEncontradaException;
+import arso.repositorio.RepositorioException;
+import arso.restaurantes.servicio.IServicioRestaurantes;
 
 public class EventoServicio {
 
@@ -23,13 +22,16 @@ public class EventoServicio {
 	public static final String QUEUE = "arso";
 	public static final String ROUTING_KEY = "arso";
 
-	public static void main(String[] argv) throws Exception {
+	public static void suscribirse(IServicioRestaurantes servicio) throws Exception {
 		ConnectionFactory factory = new ConnectionFactory();
 		factory.setUri(URI);
 		Connection connection = factory.newConnection();
 		Channel channel = connection.createChannel();
+		
+		channel.exchangeDeclare(EXCHANGE, BuiltinExchangeType.DIRECT, true);
 
 		channel.queueDeclare(QUEUE, true, false, false, null);
+		channel.queueBind(QUEUE, EXCHANGE, ROUTING_KEY);
 		System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
 		channel.basicConsume(QUEUE, false, "arso-consumidor", new DefaultConsumer(channel) {
@@ -46,12 +48,15 @@ public class EventoServicio {
 				
 				ObjectMapper objectMapper = new ObjectMapper();
 				Mensaje mensaje = objectMapper.readValue(contenido, Mensaje.class);
-				
-//				JsonReader js = Json.createReader(new StringReader(contenido));
-//				Mensaje mensaje = js.readObject();
-//				js.close();
 						
-				System.out.println(mensaje);
+				System.out.println("Recibido mensaje: " + mensaje);
+				
+				// Buscar si el restaurante está en el servicio
+				try {
+					servicio.updateResumenOpinion(mensaje.getIdOpinion(), mensaje.getNValoraciones(), mensaje.getCalMedia());
+				} catch (RepositorioException | EntidadNoEncontradaException e) {
+					throw new IOException();
+				}
 				
 				// Confirma el procesamiento
 				channel.basicAck(deliveryTag, false);
@@ -60,11 +65,15 @@ public class EventoServicio {
 	}
 }
 
-class Mensaje{
-    public String idOpinion;
-    public Valoracion valoracion;
-    public int numValoraciones;
-    public float calMedia;
+class Mensaje{ 
+	@JsonProperty("IdOpinion")
+    private String idOpinion;
+	@JsonProperty("Valoracion")
+	private Valoracion valoracion;
+	@JsonProperty("NumValoraciones")
+	private int nValoraciones;
+	@JsonProperty("CalMedia")
+	private float calMedia;
     
     public Mensaje() {
     	
@@ -74,24 +83,24 @@ class Mensaje{
 		return idOpinion;
 	}
 	public void setIdOpinion(String idOpinion) {
-		idOpinion = idOpinion;
+		this.idOpinion = idOpinion;
 	}
 	public Valoracion getValoracion() {
 		return valoracion;
 	}
 	public void setValoracion(Valoracion valoracion) {
-		valoracion = valoracion;
+		this.valoracion = valoracion;
 	}
-	public int getNumValoraciones() {
-		return numValoraciones;
+	public int getNValoraciones() {
+		return this.nValoraciones;
 	}
-	public void setNumValoraciones(int numValoraciones) {
-		numValoraciones = numValoraciones;
+	public void setNValoraciones(int nValoraciones) {
+		this.nValoraciones = nValoraciones;
 	}
 	public float getCalMedia() {
-		return calMedia;
+		return this.calMedia;
 	}
 	public void setCalMedia(float calMedia) {
-		calMedia = calMedia;
+		this.calMedia = calMedia;
 	}
 }

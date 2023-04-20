@@ -41,7 +41,7 @@ public class RepositorioRestaurantesMongo implements RepositorioString<Restauran
 		
 		// Para que jetty funcione hay que usar el driver 3.3
 		ConnectionString connectionString = new ConnectionString(
-				"mongodb://arso:<password>@ac-muzzzdk-shard-00-00.yhy3vkv.mongodb.net:27017,ac-muzzzdk-shard-00-01.yhy3vkv.mongodb.net:27017,ac-muzzzdk-shard-00-02.yhy3vkv.mongodb.net:27017/?ssl=true&replicaSet=atlas-gvuc5f-shard-0&authSource=admin&retryWrites=true&w=majority");
+				"mongodb://arso:arso@ac-muzzzdk-shard-00-00.yhy3vkv.mongodb.net:27017,ac-muzzzdk-shard-00-01.yhy3vkv.mongodb.net:27017,ac-muzzzdk-shard-00-02.yhy3vkv.mongodb.net:27017/?ssl=true&replicaSet=atlas-gvuc5f-shard-0&authSource=admin&retryWrites=true&w=majority");
 				
 
 		CodecRegistry pojoCodecRegistry = 
@@ -106,6 +106,8 @@ public class RepositorioRestaurantesMongo implements RepositorioString<Restauran
 
 	@Override
 	public Restaurante getById(String id) throws RepositorioException, EntidadNoEncontradaException {
+		if(!ObjectId.isValid(id))
+			throw new EntidadNoEncontradaException("El id no es un ObjectId válido.");
 		FindIterable<Restaurante> r = restaurantes.find(Filters.eq("_id", new ObjectId(id)));
 		Restaurante restaurante = r.first();
 		

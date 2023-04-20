@@ -24,6 +24,7 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import arso.especificacion.AndSpecification;
 import arso.especificacion.Specification;
+import arso.opiniones.servicio.EventoServicio;
 import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.RepositorioException;
 import arso.restaurantes.especificacion.IsContienePlatoSpecification;
@@ -56,6 +57,14 @@ public class RestaurantesControladorRest {
 	@Context
 	private SecurityContext securityContext;
 	
+	public RestaurantesControladorRest() {
+		try {
+			EventoServicio.suscribirse(servicio);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	// curl -i http://localhost:8080/api/restaurantes/1
 	
 	@GET
@@ -86,6 +95,7 @@ public class RestaurantesControladorRest {
 		restaurante.setIdGestor(securityContext.getUserPrincipal().getName());
 		
 		String id = servicio.create(restaurante);
+		servicio.altaOpiniones(id);
 		
 		String protocol = request.getHeader("X-Forwarded-Proto");
 		String host = request.getHeader("X-Forwarded-Host");

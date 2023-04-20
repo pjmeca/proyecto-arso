@@ -2,7 +2,6 @@ package arso.restaurantes.servicio;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import arso.especificacion.Specification;
 import arso.opiniones.modelo.Valoracion;
 import arso.opiniones.servicio.IServicioOpiniones;
@@ -11,6 +10,7 @@ import arso.repositorio.FactoriaRepositorios;
 import arso.repositorio.Repositorio;
 import arso.repositorio.RepositorioException;
 import arso.restaurantes.dom.BuscadorGeoNames;
+import arso.restaurantes.especificacion.IsOpinionSpecification;
 import arso.restaurantes.modelo.Plato;
 import arso.restaurantes.modelo.Restaurante;
 import arso.restaurantes.modelo.SitioTuristico;
@@ -64,6 +64,21 @@ public class ServicioRestaurantes implements IServicioRestaurantes {
 		Restaurante r = repositorio.getById(id);
 		return r;
 	}
+	
+	@Override
+	public void updateResumenOpinion(String idOpinion, int nValoraciones, float calMedia) throws RepositorioException, EntidadNoEncontradaException {
+		List<Restaurante> lista = repositorio.getBySpecification(new IsOpinionSpecification(idOpinion));
+		
+		if(lista.size() > 1)
+			throw new RepositorioException("Más de un restaurante tiene la opinión: " + idOpinion);
+		
+		for(Restaurante r : lista) {
+			System.out.println("Actualizando el resumen de: " + r.getNombre());
+			r.setNumValoraciones(nValoraciones);
+			r.setCalificacionMedia(calMedia);
+			update(r);
+		}				
+	}	
 
 	@Override
 	public List<SitioTuristico> getSitiosTuristicosProximos(String idRestaurante) throws RepositorioException, EntidadNoEncontradaException {

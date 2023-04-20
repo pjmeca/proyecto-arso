@@ -32,6 +32,11 @@ public interface IServicioRestaurantes {
 	Restaurante getRestaurante(String id)  throws RepositorioException, EntidadNoEncontradaException;
 	
 	/**
+	 * Actualiza el resumen de la opinión si gestiona el restaurante que se corresponde con la opinión.
+	 */
+	void updateResumenOpinion(String idOpinion, int nValoraciones, float calMedia) throws RepositorioException, EntidadNoEncontradaException ;
+	
+	/**
 	 * Obtiene una lista de sitios próximos a un restaurante.
 	 * @param El id debe pertenecer a un restaurante debe ser valido respecto al modelo de dominio
 	 */

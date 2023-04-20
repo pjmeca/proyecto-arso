@@ -1,17 +1,25 @@
 package arso.opiniones.modelo;
 
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import arso.utils.LocalDateTimeDeserializer;
 
 public class Valoracion {
 
+	@JsonProperty("Correo")
 	private String correo;
 	
 	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	@JsonProperty("Fecha")
 	private LocalDateTime fecha;
 	
+	@JsonProperty("Calificacion")
 	private float calificacion;
+	
+	@JsonProperty("Comentario")
 	private String comentario;
 	
 	public Valoracion() {
