@@ -91,11 +91,21 @@ public class RestaurantesControladorRest {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Secured(AvailableRoles.GESTOR)
 	public Response create(Restaurante restaurante, @Context HttpServletRequest request, @Context UriInfo uriInfo) throws Exception {
-
+		
 		restaurante.setIdGestor(securityContext.getUserPrincipal().getName());
 		
 		String id = servicio.create(restaurante);
-		servicio.altaOpiniones(id);
+		
+		boolean alta = false;
+		try {
+			servicio.altaOpiniones(id);
+			alta = true;
+		} catch (Exception e) {}
+		
+		if(alta == false) {
+			servicio.removeRestaurante(id);
+			throw new RepositorioException("Error al crear el restaurante");
+		}
 		
 		String protocol = request.getHeader("X-Forwarded-Proto");
 		String host = request.getHeader("X-Forwarded-Host");
