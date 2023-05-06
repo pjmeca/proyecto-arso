@@ -57,14 +57,6 @@ public class RestaurantesControladorRest {
 	@Context
 	private SecurityContext securityContext;
 	
-	public RestaurantesControladorRest() {
-		try {
-			EventoServicio.suscribirse(servicio);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
 	// curl -i http://localhost:8080/api/restaurantes/1
 	
 	@GET
