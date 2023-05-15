@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>arso</groupId>
-	<artifactId>restaurantes-rest-seguridad</artifactId>
+	<artifactId>restaurantes-rest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>restaurantes-rest-seguridad Maven Webapp</name>
+	<name>restaurantes-rest Maven Webapp</name>
 	<!-- FIXME change it to the project's website -->
 	<url>http://www.example.com</url>
 
@@ -90,7 +90,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>restaurantes-rest-seguridad</finalName>
+		<finalName>restaurantes-rest</finalName>
 		<pluginManagement>
 			<!-- lock down plugins versions to avoid using Maven 
 				defaults (may be moved to parent pom) -->
