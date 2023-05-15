@@ -23,12 +23,6 @@
 			<artifactId>slf4j-simple</artifactId>
 			<version>1.7.30</version>
 		</dependency>
-		<!-- Opiniones -->
-		<dependency>
-			<groupId>arso</groupId>
-			<artifactId>opiniones</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 		<!-- Retrofit -->
 		<dependency>
 			<groupId>com.squareup.retrofit2</groupId>
