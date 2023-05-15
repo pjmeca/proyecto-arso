@@ -12,7 +12,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class ServicioOpinionesRetrofit implements IServicioOpiniones{
 	Retrofit retrofit = new Retrofit.Builder()
-			.baseUrl("http://localhost:5041/api/")
+			.baseUrl("http://opiniones-rest:5041/api/")
 			.addConverterFactory(JacksonConverterFactory.create())
 			.build();
 

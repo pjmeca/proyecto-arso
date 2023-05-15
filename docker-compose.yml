@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  restaurantes-rest:
+    build: 
+      context: .
+      dockerfile: restaurantes-rest/Dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+    links:
+      - "opiniones-rest:opiniones-rest"
+          
+  opiniones-rest:
+    build: 
+      context: opiniones-rest
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 5041:5041
+
+  pasarela:
+    build:
+      context: .
+      dockerfile: pasarela/Dockerfile
+    restart: always
+    ports:
+      - 8090:8090
+    links:
+      - "restaurantes-rest:restaurantes-rest"
+      - "opiniones-rest:opiniones-rest"
+    environment:    
+      - URI_REDIRECCION=http://localhost:3000 # redirección web de DaWEB

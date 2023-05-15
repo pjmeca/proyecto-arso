@@ -1,22 +1,17 @@
 package pasarela.zuul.seguridad;
 
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-
 import servicio.FactoriaServicios;
 import usuarios.modelo.Usuario;
 import usuarios.servicio.IServicioUsuarios;
@@ -28,7 +23,7 @@ public class SecuritySuccessHandler implements AuthenticationSuccessHandler {
 	public static final String AUTHORIZATION_HEADER = "Authorization";
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-
+	private String URI_REDIRECCION = System.getenv("URI_REDIRECCION");
 	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -62,19 +57,18 @@ public class SecuritySuccessHandler implements AuthenticationSuccessHandler {
 			Cookie cookie = new Cookie("jwt", jwt);
 			cookie.setMaxAge(JwtUtils.EXPIRATION_TIME); 
 			// cookie.setSecure(true);
-			cookie.setHttpOnly(true);
+			//cookie.setHttpOnly(true);
 			cookie.setPath("/");
 			
 			response.addCookie(cookie);
-			
-			// Opción 1:depuración y pruebas del backend, muestra el token por la salida
-			
-			response.getOutputStream().write(responseBody.getBytes());
-			
-			// Opción 2: redigire a una página de referencia
-			
-			// redirectStrategy.sendRedirect(request, response, "/home");
-			
+			System.out.println(URI_REDIRECCION);
+			// Redirección
+			if(URI_REDIRECCION != null)
+				// Opción 2: redigire a una página de referencia
+				redirectStrategy.sendRedirect(request, response, URI_REDIRECCION);
+			else
+				// Opción 1:depuración y pruebas del backend, muestra el token por la salida
+				response.getOutputStream().write(responseBody.getBytes());
 		} else {
 			
 			Utils.writeResponseJSON(response, HttpServletResponse.SC_UNAUTHORIZED, Utils.buildLoginErrorJSON(authentication.getName()));			
