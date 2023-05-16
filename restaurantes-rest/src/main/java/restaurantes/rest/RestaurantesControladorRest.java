@@ -24,7 +24,6 @@ import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
 import arso.especificacion.AndSpecification;
 import arso.especificacion.Specification;
-import arso.opiniones.servicio.EventoServicio;
 import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.RepositorioException;
 import arso.restaurantes.especificacion.IsContienePlatoSpecification;

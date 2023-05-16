@@ -15,8 +15,6 @@ public class ServicioUsuarios implements IServicioUsuarios {
 	@Override
 	public Usuario findByEmail(String email) throws RepositorioException, EntidadNoEncontrada {
 		
-		// FIXME: implementar el patrón especificación
-		
 		Usuario resultado = repositorio.getAll().stream()
 			.filter(usuario -> usuario.getEmail().equals(email))
 			.findFirst().orElseThrow(() -> new EntidadNoEncontrada("No existe usuario con email: " + email));
@@ -26,8 +24,6 @@ public class ServicioUsuarios implements IServicioUsuarios {
 	
 	@Override
 	public Usuario findByOAuthId(String oauthId) throws RepositorioException, EntidadNoEncontrada {
-		
-		// FIXME: implementar el patrón especificación
 		
 		Usuario resultado = repositorio.getAll().stream()
 			.filter(usuario -> usuario.getIdOAuth().equals(oauthId))

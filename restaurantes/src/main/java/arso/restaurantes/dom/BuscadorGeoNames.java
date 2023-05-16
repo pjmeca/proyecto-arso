@@ -55,7 +55,6 @@ public final class BuscadorGeoNames {
 			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 			transformer.transform(new DOMSource(doc), new StreamResult(new OutputStreamWriter(out, "UTF-8")));
 		} catch (TransformerException | UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -90,9 +89,6 @@ public final class BuscadorGeoNames {
 				System.err.println("Agotados los reintentos de conexión");
 				throw new java.net.ConnectException();
 			}
-				
-
-			// printDocument(documento, System.out);
 
 			NodeList elementos = documento.getElementsByTagName("entry");
 			System.out.println("Búsqueda completada. " + elementos.getLength() + " resultados");
@@ -105,9 +101,7 @@ public final class BuscadorGeoNames {
 				String descripcionText = descripcion == null ? "" : descripcion.getTextContent();
 				Node wikipediaUrl = entrada.getElementsByTagName("wikipediaUrl").item(0);
 				String wikipediaUrlText = wikipediaUrl == null ? "" : wikipediaUrl.getTextContent();
-
-				// System.out.println(nombreText + "\n" + descripcionText + "\n" +
-				// wikipediaUrlText);
+				
 				SitioTuristico l = new SitioTuristico();
 				l.setNombre(nombreText);
 				l.setDescripcion(descripcionText);
@@ -115,7 +109,6 @@ public final class BuscadorGeoNames {
 				lugares.add(l);
 			}
 		} catch (ParserConfigurationException | SAXException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

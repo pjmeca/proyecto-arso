@@ -37,7 +37,6 @@ public class ServicioRestaurantesTest {
 			r3 = servicio.create(new Restaurante("McDonalds", 900, 900));
 			r4 = servicio.create(new Restaurante("La Catedral", 37.983976, -1.128910));
 		} catch (RepositorioException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

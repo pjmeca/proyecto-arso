@@ -58,7 +58,6 @@ public class RepositorioTest extends RepositorioRestaurantesMemoria {
 			add(restaurante1);
 			add(restaurante2);
 		} catch (RepositorioException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 	}

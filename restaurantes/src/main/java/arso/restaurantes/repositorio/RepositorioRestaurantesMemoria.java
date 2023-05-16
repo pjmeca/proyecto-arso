@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import arso.especificacion.Specification;
 import arso.repositorio.EntidadNoEncontradaException;
 import arso.repositorio.RepositorioException;
 import arso.repositorio.RepositorioString;
 import arso.restaurantes.modelo.Restaurante;
-import arso.utils.Utils;
 
 public class RepositorioRestaurantesMemoria implements RepositorioString<Restaurante>{
 	
