@@ -41,7 +41,7 @@ public class RepositorioRestaurantesMongo implements RepositorioString<Restauran
 		
 		// Para que jetty funcione hay que usar el driver 3.3
 		ConnectionString connectionString = new ConnectionString(
-				"mongodb://arso:arso@ac-muzzzdk-shard-00-00.yhy3vkv.mongodb.net:27017,ac-muzzzdk-shard-00-01.yhy3vkv.mongodb.net:27017,ac-muzzzdk-shard-00-02.yhy3vkv.mongodb.net:27017/?ssl=true&replicaSet=atlas-gvuc5f-shard-0&authSource=admin&retryWrites=true&w=majority");
+				System.getenv("URI_MONGODB"));
 				
 
 		CodecRegistry pojoCodecRegistry = 

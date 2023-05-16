@@ -14,7 +14,7 @@ public class RepositorioOpinionesMongoDB : Repositorio<Opinion, string>
 
     public RepositorioOpinionesMongoDB()
     {
-        var client = new MongoClient("mongodb+srv://arso:arso@cluster0.yhy3vkv.mongodb.net/?retryWrites=true&w=majority");
+        var client = new MongoClient(Environment.GetEnvironmentVariable("URI_MONGODB"));
         var database = client.GetDatabase("arso");
 
         _opiniones = database.GetCollection<Opinion>("opiniones");

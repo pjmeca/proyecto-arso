@@ -16,10 +16,10 @@ public class Mensaje{
 
 public class EventoServicio 
 {
-    public const string URI = "amqps://dbuadusv:RUItokUvjf65IFZDxkDZ6J1Z3punicMq@rat.rmq2.cloudamqp.com/dbuadusv";
-    public const string EXCHANGE = "amq.direct";
-    public const string QUEUE = "arso";
-    public const string ROUTING_KEY = "arso";
+    public static string URI = Environment.GetEnvironmentVariable("RABBITMQ_URI");
+    public static string EXCHANGE = Environment.GetEnvironmentVariable("RABBITMQ_EXCHANGE");
+    public static string QUEUE = Environment.GetEnvironmentVariable("RABBITMQ_QUEUE");
+    public static string ROUTING_KEY = Environment.GetEnvironmentVariable("RABBITMQ_ROUTING_KEY");
 
     public static void send(Mensaje mensaje)
     {

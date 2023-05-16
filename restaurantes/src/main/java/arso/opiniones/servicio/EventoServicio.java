@@ -17,10 +17,10 @@ import arso.restaurantes.servicio.IServicioRestaurantes;
 
 public class EventoServicio {
 
-	public static final String URI = "amqps://dbuadusv:RUItokUvjf65IFZDxkDZ6J1Z3punicMq@rat.rmq2.cloudamqp.com/dbuadusv";
-	public static final String EXCHANGE = "amq.direct";
-	public static final String QUEUE = "arso";
-	public static final String ROUTING_KEY = "arso";
+	public static final String URI = System.getenv("RABBITMQ_URI");
+	public static final String EXCHANGE = System.getenv("RABBITMQ_EXCHANGE");
+	public static final String QUEUE = System.getenv("RABBITMQ_QUEUE");
+	public static final String ROUTING_KEY = System.getenv("RABBITMQ_ROUTING_KEY");
 
 	public static void suscribirse(IServicioRestaurantes servicio) throws Exception {
 		ConnectionFactory factory = new ConnectionFactory();
