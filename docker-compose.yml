@@ -25,7 +25,8 @@ services:
     ports:
       - 5041:5041
     environment:
-      - URI_MONGODB=mongodb+srv://arso:arso@cluster0.yhy3vkv.mongodb.net/?retryWrites=true&w=majority
+      #- URI_MONGODB=mongodb+srv://arso:arso@cluster0.yhy3vkv.mongodb.net/?retryWrites=true&w=majority
+      - URI_MONGODB=mongodb://arso:arso@mongodb:27017
       - RABBITMQ_URI=amqps://dbuadusv:RUItokUvjf65IFZDxkDZ6J1Z3punicMq@rat.rmq2.cloudamqp.com/dbuadusv
       - RABBITMQ_EXCHANGE=amq.direct
       - RABBITMQ_QUEUE=arso
@@ -43,3 +44,13 @@ services:
       - "opiniones-rest:opiniones-rest"
     environment:    
       - URI_REDIRECCION=http://localhost:3000 # redirección web de DaWEB
+
+  mongodb: # mongodb://arso:arso@mongodb:27017
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=arso
+      - MONGO_INITDB_ROOT_PASSWORD=arso
