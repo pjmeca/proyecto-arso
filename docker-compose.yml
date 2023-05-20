@@ -15,7 +15,8 @@ services:
       - RABBITMQ_URI=amqps://dbuadusv:RUItokUvjf65IFZDxkDZ6J1Z3punicMq@rat.rmq2.cloudamqp.com/dbuadusv
       - RABBITMQ_EXCHANGE=amq.direct
       - RABBITMQ_QUEUE=arso
-      - RABBITMQ_ROUTING_KEY=arso      
+      - RABBITMQ_ROUTING_KEY=arso
+      - URI_OPINIONES=http://opiniones-rest:5041/api/
           
   opiniones-rest:
     build: 
