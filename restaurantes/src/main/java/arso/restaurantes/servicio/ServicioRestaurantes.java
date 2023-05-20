@@ -163,6 +163,7 @@ public class ServicioRestaurantes implements IServicioRestaurantes {
 				resumen.setNombre(restaurante.getNombre());
 				resumen.setLatitud(restaurante.getLatitud());
 				resumen.setLongitud(restaurante.getLongitud());
+				resumen.setCalificacionMedia(restaurante.getCalificacionMedia());
 				resultado.add(resumen);
 				
 			} catch (Exception e) {
@@ -189,6 +190,7 @@ public class ServicioRestaurantes implements IServicioRestaurantes {
 			resumen.setNombre(r.getNombre());
 			resumen.setLatitud(r.getLatitud());
 			resumen.setLongitud(r.getLongitud());
+			resumen.setCalificacionMedia(r.getCalificacionMedia());
 			resultado.add(resumen);
 		}
 		

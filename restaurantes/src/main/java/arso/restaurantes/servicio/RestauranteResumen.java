@@ -5,6 +5,7 @@ public class RestauranteResumen {
 	private String id;
 	private String nombre;
 	private double latitud, longitud;
+	private float calificacionMedia; // necesario para DAWEB
 	
 	public String getId() {
 		return id;
@@ -29,6 +30,12 @@ public class RestauranteResumen {
 	}
 	public void setLongitud(double longitud) {
 		this.longitud = longitud;
+	}	
+	public float getCalificacionMedia() {
+		return calificacionMedia;
+	}
+	public void setCalificacionMedia(float calificacionMedia) {
+		this.calificacionMedia = calificacionMedia;
 	}
 	
 	@Override
