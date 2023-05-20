@@ -6,11 +6,6 @@ import arso.restaurantes.modelo.Restaurante;
 import arso.restaurantes.modelo.SitioTuristico;
 import arso.restaurantes.repositorio.RepositorioRestaurantesMemoria;
 
-/*
- * En la carpeta de código fuente se crea el fichero "repositorios.properties" para 
- * reemplazar el valor por defecto (configurado en el proyecto Bookle) y establecer el repositorio de pruebas
- */
-
 public class RepositorioTest extends RepositorioRestaurantesMemoria {
 
 	public RepositorioTest() {		
