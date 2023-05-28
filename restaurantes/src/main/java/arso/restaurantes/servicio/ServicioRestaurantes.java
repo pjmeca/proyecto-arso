@@ -139,10 +139,11 @@ public class ServicioRestaurantes implements IServicioRestaurantes {
 
 	@Override
 	public void removeRestaurante(String idRestaurante) throws RepositorioException, EntidadNoEncontradaException {
-		if(idRestaurante==null | idRestaurante.isBlank()){
+		if(idRestaurante==null || idRestaurante.isBlank() || !contiene(idRestaurante)){
 			throw new IllegalArgumentException("El id no es valido");
 		}
-		repositorio.delete(idRestaurante);		
+		opiniones.delete(getRestaurante(idRestaurante).getOpinion());
+		repositorio.delete(idRestaurante);
 	}
 	
 	@Override

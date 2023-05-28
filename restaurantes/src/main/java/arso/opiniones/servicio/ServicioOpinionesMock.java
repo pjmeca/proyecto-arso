@@ -45,5 +45,12 @@ public class ServicioOpinionesMock implements IServicioOpiniones {
 		
 		return lista;
 	}
+	
+	@Override
+	public void delete(String id) throws RepositorioException {
+		if(!id.equals(idPrueba))
+			throw new RepositorioException("No existe la opinión.");
+		return;
+	}
 
 }

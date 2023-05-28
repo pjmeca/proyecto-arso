@@ -23,4 +23,9 @@ public interface IServicioOpiniones {
 	 */
 	public List<Valoracion> getValoraciones(String idRestaurante) throws RepositorioException;
 
+	/**
+	 * Método para eliminar la opinión asociada a un recurso.
+	 * @param id el id de la opinión
+	 */
+	public void delete(String id) throws RepositorioException;
 }

@@ -47,5 +47,23 @@ public class ServicioOpinionesRetrofit implements IServicioOpiniones{
 			throw new RepositorioException("Error al recuperar las valoraciones");			
 		}
 	}
+	
+	@Override
+	public void delete(String id) throws RepositorioException {
+		if(id.isBlank())
+			throw new RepositorioException("El nombre del recurso no es válido.");
+		
+		Response<Void> res;
+		
+		try {
+			res = service.delete(id).execute();			
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RepositorioException("Error al eliminar la opinión");			
+		}
+		
+		if(res == null || !res.isSuccessful())
+			throw new RepositorioException("Error al eliminar la opinión");				
+	}
 
 }
