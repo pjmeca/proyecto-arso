@@ -1,0 +1,523 @@
+{
+	"info": {
+		"_postman_id": "e6484be1-b9e7-464a-9c08-03a4a4e68398",
+		"name": "PruebasEntrevista",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Crear un restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Obtener el valor de la cabecera \"Location\"\r",
+							"var locationHeader = pm.response.headers.get(\"Location\");\r",
+							"\r",
+							"// Extraer el valor al final de la URL\r",
+							"var valorFinalURL = locationHeader.split('/').pop();\r",
+							"\r",
+							"// Imprimir el valor extraído en la consola\r",
+							"console.log(\"Restaurante creado con id\", valorFinalURL);\r",
+							"\r",
+							"// Establecer el valor extraído en una variable\r",
+							"//pm.environment.set(\"idRestaurante\", valorFinalURL);\r",
+							"pm.collectionVariables.set(\"idRestaurante\", valorFinalURL);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"PruebaEntrevista\",\r\n    \"latitud\": 37.98026,\r\n    \"longitud\": -1.129792,\r\n    \"platos\": [\r\n        {\r\n            \"nombre\": \"Hamburguesa\",\r\n            \"descripcion\": \"Deliciosa hamburguesa con pepinillos.\",\r\n            \"precio\": 5.0\r\n        },\r\n        {\r\n            \"nombre\": \"Tomate con bonito\",\r\n            \"descripcion\": \"Deliciosos tomates de la huerta con bonito fresco.\",\r\n            \"precio\": 13.0\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/restaurantes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"restaurantes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener un restaurante",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Obtener la respuesta JSON de la solicitud GET\r",
+							"var responseBody = pm.response.json();\r",
+							"\r",
+							"// Obtener el valor del campo \"opinion\"\r",
+							"var valorOpinion = responseBody.opinion;\r",
+							"\r",
+							"// Imprimir el valor de la opinión en la consola\r",
+							"console.log(\"Valor de la opinión:\", valorOpinion);\r",
+							"\r",
+							"// Establecer el valor de la opinión en otra variable\r",
+							"pm.collectionVariables.set(\"idOpinion\", valorOpinion);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/restaurantes/{{idRestaurante}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"restaurantes",
+						"{{idRestaurante}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar un restaurante",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"{{idRestaurante}}\",\r\n    \"nombre\": \"PruebaEntrevistaActualizado\",\r\n    \"latitud\": 37.98026,\r\n    \"longitud\": -1.129792,\r\n    \"idGestor\": \"pblmeca@gmail.com\",\r\n    \"sitiosTuristicos\": [],\r\n    \"platos\": [\r\n        {\r\n            \"nombre\": \"Hamburguesa\",\r\n            \"descripcion\": \"Deliciosa hamburguesa con pepinillos.\",\r\n            \"precio\": 5.0,\r\n            \"disponible\": true\r\n        },\r\n        {\r\n            \"nombre\": \"Tomate con bonito\",\r\n            \"descripcion\": \"Deliciosos tomates de la huerta con bonito fresco.\",\r\n            \"precio\": 13.0,\r\n            \"disponible\": true\r\n        }\r\n    ],\r\n    \"numValoraciones\": 0,\r\n    \"calificacionMedia\": 1.0,\r\n    \"opinion\": \"{{idOpinion}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8090/restaurantes/{{idRestaurante}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"restaurantes",
+						"{{idRestaurante}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener los sitios próximos del restaurante",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/restaurantes/{{idRestaurante}}/sitiosProximos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"restaurantes",
+						"{{idRestaurante}}",
+						"sitiosProximos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener listado de restaurantes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/restaurantes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"restaurantes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener listado de restaurantes con filtros",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/restaurantes?radio=2&latitud=37&longitud=0&plato=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"restaurantes"
+					],
+					"query": [
+						{
+							"key": "radio",
+							"value": "2"
+						},
+						{
+							"key": "latitud",
+							"value": "37"
+						},
+						{
+							"key": "longitud",
+							"value": "0"
+						},
+						{
+							"key": "plato",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Añadir un plato",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"Pizza Barbacoa\",\r\n    \"descripcion\": \"Sabrosa pizza barbacoa de la casa.\",\r\n    \"precio\": 13.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8090/restaurantes/{{idRestaurante}}/plato",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"restaurantes",
+						"{{idRestaurante}}",
+						"plato"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar un plato",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\": \"Hamburguesa\",\r\n    \"descripcion\": \"Deliciosa hamburguesa con pepinillos.\",\r\n    \"precio\": 5.0,\r\n    \"disponible\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8090/restaurantes/{{idRestaurante}}/plato",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"restaurantes",
+						"{{idRestaurante}}",
+						"plato"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar un plato",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "nombre=Pizza Barbacoa"
+				},
+				"url": {
+					"raw": "http://localhost:8090/restaurantes/{{idRestaurante}}/plato",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"restaurantes",
+						"{{idRestaurante}}",
+						"plato"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener todas las opiniones",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/opiniones",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"opiniones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener la opinión de un restaurante",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/opiniones/{{idOpinion}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"opiniones",
+						"{{idOpinion}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hacer una valoración sobre un restaurante",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"correo\": \"pablojesus.mecam@um.es\",\r\n    \"fecha\": \"2023-05-29T17:45:00.000Z\",\r\n    \"calificacion\": 4,\r\n    \"comentario\": \"Muy buena!!!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8090/opiniones/{{idOpinion}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"opiniones",
+						"{{idOpinion}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Volver a hacer una valoración sobre el mismo restaurante",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"correo\": \"pablojesus.mecam@um.es\",\r\n    \"fecha\": \"2023-05-29T17:45:00.000Z\",\r\n    \"calificacion\": 5,\r\n    \"comentario\": \"Muy buena!!!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8090/opiniones/{{idOpinion}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"opiniones",
+						"{{idOpinion}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Hacer una valoración sobre un restaurante con otro usuario",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"correo\": \"pablojesus.mecam2@um.es\",\r\n    \"fecha\": \"2023-05-29T17:45:00.000Z\",\r\n    \"calificacion\": 2,\r\n    \"comentario\": \"No me ha gustado\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8090/opiniones/{{idOpinion}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"opiniones",
+						"{{idOpinion}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener todas las valoraciones de un restaurante",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8090/opiniones/{{idOpinion}}/valoraciones",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"opiniones",
+						"{{idOpinion}}",
+						"valoraciones"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar el restaurante creado",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [],
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8090/restaurantes/{{idRestaurante}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"restaurantes",
+						"{{idRestaurante}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIzZTkzNGZmNC0xMTQ5LTQ5YjEtYTUwNS01ZmIwOGJmMDI2MjciLCJpc3MiOiJQYXNhcmVsYSBadXVsIiwiZXhwIjoxNjg1Mzg0MTM5LCJzdWIiOiJwam1lY2EiLCJ1c3VhcmlvIjoicGJsbWVjYUBnbWFpbC5jb20iLCJyb2wiOiJHRVNUT1IifQ.XU86adBDqK4kP-2rp9MZyZxbG4TxPd8EiBBK6rmAKbE",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "idRestaurante",
+			"value": ""
+		},
+		{
+			"key": "idOpinion",
+			"value": ""
+		}
+	]
+}

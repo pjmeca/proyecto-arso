@@ -1,0 +1,52 @@
+# http://localhost:8080/graphiql.html
+query mostrarTodo {
+  findAll 
+  {
+    id, 
+    nombre,
+    valoraciones {
+      correo,
+      fecha,
+      calificacion,
+      comentario
+    },
+    numValoraciones,
+    calificacionMedia
+  }
+},  
+query mostrarId {
+  getOpinion(id : "6473d82529487d452029c95d")
+  {
+    id, 
+    nombre,
+    valoraciones {
+      correo,
+      fecha,
+      calificacion,
+      comentario
+    },
+    numValoraciones,
+    calificacionMedia
+  }
+},
+mutation crear{
+  crearOpinion(recurso : "opinionDesdeGraphiQL")
+  {
+    nombre
+  }
+},
+mutation addValoracion {
+  addValoracion(
+    id : "6473d82529487d452029c95d",
+    correo : "prueba@correo.com",
+    fecha : "2023-05-29T00:00",
+    calificacion : 4.7,
+    comentario : "Muy bueno todo"
+  )
+  {
+    correo
+  }
+}
+mutation remove {
+  removeOpinion(id :"6473d8e729487d452029c95e")
+}
